@@ -1,0 +1,41 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">NUSID</a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse ">
+			<ul class="nav navbar-nav">
+				<li><a href="/mypublictab">My public tab</a></li>
+				<li><a href="/myprivatetab">My private tab</a></li>
+				<% if (typeof user == 'undefined') { %>
+					<li data-toggle="modal" data-target="#login-modal"><a href="#">Connexion</a></li>
+				<% } else { %>
+					<li class="dropdown">
+			        	<a href="/dashboard" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+			        		<span class="glyphicon glyphicon-user"></span>
+			        		<%= user.username %>
+			        		<span class="caret"></span>
+			        	</a>
+			        	<ul class="dropdown-menu">
+			            	<li><a href="/dashboard"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>Dashboard</a></li>
+			            	<li><a href="/settings"><span class="glyphicon glyphicon glyphicon-cog" aria-hidden="true"></span>Settings</a></li>
+			            	<li role="separator" class="divider"></li>
+			            	<li><a href="/logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>Logout</a></li>
+			          	</ul>
+	       			</li>
+				<% } %>
+			</ul>
+		</div>
+	</div>
+</nav>
+<% include partials/alerts %>
+<% if (typeof user == 'undefined') { %>
+	<% include dialogs/login %>
+	<% include dialogs/forgot-password %>
+<% } %>

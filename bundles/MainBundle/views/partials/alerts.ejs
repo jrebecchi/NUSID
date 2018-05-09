@@ -1,0 +1,48 @@
+<div class="container" id="alerts-container">
+    <% 
+        if(flash !== undefined){ 
+            if(flash.success != undefined){
+                flash.success.forEach(function(message, index) { 
+                %>
+                <div class="alert alert-success">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Success! </strong><%- message %>
+                </div>
+                <%
+               });
+            }
+            
+            if(flash.info != undefined){
+                flash.info.forEach(function(message, index) { 
+               %>
+                <div class="alert alert-info">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Info! </strong><%- message %>
+                </div>
+                <%
+               });
+            }
+    
+            if(flash.warning != undefined){
+                flash.warning.forEach(function(message, index) { 
+               %>
+                <div class="alert alert-warning">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Warning! </strong><%- message %>
+                </div>
+                <%
+               });
+            }
+            if(flash.error != undefined){
+               flash.error.forEach(function(message, index) { 
+               %>
+                <div class="alert alert-danger">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Error! </strong><%- message %>
+                </div>
+                <%
+               });
+            }
+        }
+    %>
+</div>

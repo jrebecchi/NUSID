@@ -1,0 +1,28 @@
+<% include partials/head %>
+<% include partials/header %>
+
+<div class="container">
+	<div id="content">
+		<h1>Dashboard</h1>
+		<p>Welcome to your dashboard <%= user.username %></p>
+		<hr>
+		<div class="row">
+			<div class="col-sm-6 col-md-3">
+			  	<div class="thumbnail" style="background-color:#f8f8f8">
+			    	<a href="/settings" class="thumbnail">
+						<img src="img/cog.svg" alt="settings">
+					</a>
+					<div class="caption" style="margin:-35px 0px -10px;">
+						<a href="/settings">
+							<h3>Settings</h3>
+						</a>
+					</div>
+			    </div>
+		  	</div>
+		</div>
+	</div>
+</div>
+		
+<% include partials/footer %>
+<% include partials/end %>
+		
