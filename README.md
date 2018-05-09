@@ -1,15 +1,14 @@
 [![NUSID Logo](https://nusidpublicresources-xeqnuojpin.now.sh/Nusid_Banner_Logo_800px.jpg)](#)
 
-<center>NUSID - Node.JS User Space for Idle Developers ! </center>
+NUSID - Node.JS User Space for Idle Developers !
 
-NUSID is generic user space you can use in all your [Node.js](http://nodejs.org) apps as a starting point. It contains everything, from the [MongoDB](https://www.mongodb.com/) database model to the dynamic views made with [EJS](http://ejs.co/), [Bootstrap3](http://getbootstrap.com/docs/3.3/) and [AngularJS](https://angularjs.org/). 
+NUSID is a generic user space you can use in all your [Node.js](http://nodejs.org) apps as a starting point. It contains everything, from the [MongoDB](https://www.mongodb.com/) database model to the dynamic views made with [EJS](http://ejs.co/), [Bootstrap3](http://getbootstrap.com/docs/3.3/) and [AngularJS](https://angularjs.org/). 
 
 If you are an idle developer NUSID is made for you !
 
   [![Linux Build][travis-image]][travis-url]
 
 ![NUSID Screenshot](https://nusidpublicresources-xeqnuojpin.now.sh/login_screenshot.png)
-
 ## Features
   * Registration
   * Login
