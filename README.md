@@ -51,7 +51,7 @@ blablabla
 
 blablabla
 
-## Modify the actual architecture
+## Adapt NUSID generic bundles
 
 blablabla
 
@@ -61,7 +61,7 @@ If you discover a security vulnerability or a bug please contact me.
 
 ## Philosophy
 
-NUSID wish to give you a starting point into your [Node.js](https://nodejs.org/en/) project with a complete user space and also a framework. This app is architectured in bundles, similarly as in the PHP framework [Symfony](https://symfony.com/). Feel free to adapt/modify the present bundles to make them fit your needs and imply add your own bundles as shown above.
+NUSID wish to give you a starting point into your [Node.js](https://nodejs.org/en/) project with a complete user space and also a framework. This app is architectured in bundles, similarly as in the PHP framework [Symfony](https://symfony.com/). Feel free to adapt/modify the present bundles to make them fit your needs and simply add your own bundles as shown above.
 
 ## Want to contribute
 
