@@ -1,4 +1,3 @@
-var angular = require("angular");
 var InputValidator = require("../../bundles/UserspaceBundle/service/forms/InputValidatorService");
 var registrationCB = require("../../bundles/UserspaceBundle/service/forms/callbacks/RegistrationCallbacks");
 
@@ -77,7 +76,6 @@ app.controller('registration', function($scope, $http) {
                 iv.testInput(registrationCB.testImperativeCheckBox,$scope.conditions);
                 break;
         }
-        console.log(iv);
         $scope.inputs[inputName] = {
             hasError : iv.hasError,
             isValid : !iv.hasError,
