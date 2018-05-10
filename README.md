@@ -51,7 +51,11 @@ blablabla
 
 blablabla
 
-### Security Issues
+## Modify the actual architecture
+
+blablabla
+
+## Security Issues
 
 If you discover a security vulnerability or a bug please contact me.
 
@@ -61,7 +65,7 @@ NUSID wish to give you a starting point into your [Node.js](https://nodejs.org/e
 
 ## Want to contribute
 
-If your want to share some improvements, contact me and I will add you as a contributor.
+If you want to share some improvements, contact me and I will add you as a contributor.
 
 ## License
 
