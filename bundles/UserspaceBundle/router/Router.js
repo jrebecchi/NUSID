@@ -11,7 +11,7 @@ var csrfProtection = csrf({ cookie: true })
 var parseForm = bodyParser.urlencoded({ extended: false })
 var UserManagement = require('../model/UserModel');
 
-exports.launchRouter = function(app) {
+exports.launchRouter = function(app, dbOptions) {
     
     var bodyParser = require('body-parser');
     var urlencodedParser = bodyParser.urlencoded({
@@ -25,13 +25,13 @@ exports.launchRouter = function(app) {
         userspaceController.getLogin(req, res);
     });
     app.get('/email-exists', function(req, res) {
-        userController.getCheckEmailExists(req, res, new UserManagement());
+        userController.getCheckEmailExists(req, res, new UserManagement(dbOptions));
     });
     app.get('/username-exists', function(req, res) {
-        userController.getCheckUsernameExists(req, res, new UserManagement());
+        userController.getCheckUsernameExists(req, res, new UserManagement(dbOptions));
     });
     app.post('/register', parseForm, csrfProtection, urlencodedParser, function(req, res) {
-        userController.createUser(app, req, res, new UserManagement());
+        userController.createUser(app, req, res, new UserManagement(dbOptions));
     });
     app.post('/login', parseForm, csrfProtection,
         passport.authenticate('local', {
@@ -47,11 +47,11 @@ exports.launchRouter = function(app) {
     });
     
     app.get('/send_confirmation_email', require('connect-ensure-login').ensureLoggedIn(),function(req, res){
-        userController.getSendConfirmationEmail(app, req, res, new UserManagement());
+        userController.getSendConfirmationEmail(app, req, res, new UserManagement(dbOptions));
     });
     
     app.post('/password_reset', parseForm, csrfProtection, function(req, res){
-        passwordResetController.resetPassword(app, req, res, new UserManagement());
+        passwordResetController.resetPassword(app, req, res, new UserManagement(dbOptions));
     });
     
     app.get('/password_reset', csrfProtection, function(req, res){
@@ -63,31 +63,31 @@ exports.launchRouter = function(app) {
     });
     
     app.post('/password_renew', parseForm, csrfProtection, function(req, res){
-        passwordResetController.changePassword(app, req, res, new UserManagement());
+        passwordResetController.changePassword(app, req, res, new UserManagement(dbOptions));
     });
     app.get('/confirm_email', csrfProtection, function(req, res){
-        userController.getConfirmEmail(req, res, new UserManagement());
+        userController.getConfirmEmail(req, res, new UserManagement(dbOptions));
     });
     app.get('/settings', csrfProtection, require('connect-ensure-login').ensureLoggedIn(),function(req, res){
         userspaceController.getSettings(req, res);
     });
     app.post('/modify-password', parseForm, csrfProtection, require('connect-ensure-login').ensureLoggedIn(),function(req, res){
-        userController.postModifyPassword(req, res, new UserManagement());
+        userController.postModifyPassword(req, res, new UserManagement(dbOptions));
     });
     app.post('/modify-username', parseForm, csrfProtection, require('connect-ensure-login').ensureLoggedIn(),function(req, res){
-        userController.postModifyUsername(req, res, new UserManagement());
+        userController.postModifyUsername(req, res, new UserManagement(dbOptions));
     });
     app.post('/modify-email', parseForm, csrfProtection, require('connect-ensure-login').ensureLoggedIn(),function(req, res){
-        userController.postModifyEmail(app, req, res, new UserManagement());
+        userController.postModifyEmail(app, req, res, new UserManagement(dbOptions));
     });
     app.post('/modify-firstname', parseForm, csrfProtection, require('connect-ensure-login').ensureLoggedIn(),function(req, res){
-        userController.postModifyFirstName(req, res, new UserManagement());
+        userController.postModifyFirstName(req, res, new UserManagement(dbOptions));
     });
     app.post('/modify-lastname', parseForm, csrfProtection, require('connect-ensure-login').ensureLoggedIn(),function(req, res){
-        userController.postModifyLastName(req, res, new UserManagement());
+        userController.postModifyLastName(req, res, new UserManagement(dbOptions));
     });
     app.post('/delete-account', parseForm, csrfProtection, require('connect-ensure-login').ensureLoggedIn(),function(req, res){
-        userController.postDeleteAccount(req, res, new UserManagement());
+        userController.postDeleteAccount(req, res, new UserManagement(dbOptions));
     });
     
     // Configure the local strategy for use by Passport.
@@ -97,7 +97,7 @@ exports.launchRouter = function(app) {
     // will be set at `req.user` in route handlers after authentication.
     passport.use(new Strategy(
         function(email, password, cb) {
-            var users = new UserManagement();
+            var users = new UserManagement(dbOptions);
             users.load(function(err) {
                 if (err) {
                     users.close();
@@ -134,7 +134,7 @@ exports.launchRouter = function(app) {
     // serializing, and querying the user record by ID from the database when
     // deserializing.
     passport.serializeUser(function(user, cb) {
-        var users = new UserManagement();
+        var users = new UserManagement(dbOptions);
         users.load(function(err) {
             if (err) {
                 users.close();
@@ -153,7 +153,7 @@ exports.launchRouter = function(app) {
     });
 
     passport.deserializeUser(function(token, cb) {
-        var users = new UserManagement();
+        var users = new UserManagement(dbOptions);
         users.load(function(err) {
             if (err) {
                 users.close();

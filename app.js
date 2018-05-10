@@ -7,6 +7,13 @@ var userspaceBundle = require('./bundles/UserspaceBundle/UserspaceBundle');
 var mainBundle = require('./bundles/MainBundle/MainBundle');
 var myOwnBundle = require('./bundles/MyOwnBundle/MyOwnBundle');
 
+//enter your mongoDB database connection options for the userspace
+var dbOptions = {
+	hostname :"dbuser:dbpassword@host.com",
+  port :"19150",
+	database : "user_management"
+}
+
 //Enter your email options for the userspace from where will be sent the emails
 //Check Express-mailer confirguration for more options (https://github.com/RGBboy/express-mailer)
 var userspaceMailOptions = {
@@ -22,7 +29,7 @@ var userspaceMailOptions = {
 };
 
 //Enable your bundles
-userspaceBundle.enable(app, userspaceMailOptions);
+userspaceBundle.enable(app, userspaceMailOptions, dbOptions);
 mainBundle.enable(app);
 myOwnBundle.enable(app);
 
