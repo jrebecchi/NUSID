@@ -34,8 +34,7 @@ This is a [Node.js](https://nodejs.org/en/) app working with [MongoDB](https://w
 Node.js 0.10 or higher is required. You also need to have a distant access or a local installation of [MongoDB](https://www.mongodb.com/). 
 
 Installation is done using the
-[`git clone` command](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git):
-[`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
+[`git clone` command](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
 ```bash
 $ git clone https://github.com/JohannC/NUSID
@@ -81,11 +80,11 @@ var userspaceMailOptions = {
 };
 ```
 
-**PROTIP** You can deploy for free this NodeJS app on [Zeit](https://zeit.co)
+**TIP!** You can deploy for free this NodeJS app on [Zeit](https://zeit.co)
 
-**PROTIP** You can have a free MongoDB database on [MLab](https://mlab.com/)
+**TIP!** You can have a free MongoDB database on [MLab](https://mlab.com/)
 
-**PROTIP** You can use a gmail email by [allowing less secure app](https://myaccount.google.com/lesssecureapps)
+**TIP!** You can use a Gmail email by [allowing less secure app](https://myaccount.google.com/lesssecureapps)
 
 
 ## Bundle architecture
