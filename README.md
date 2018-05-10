@@ -26,7 +26,7 @@ If you are an idle developer NUSID is made for you !
 
 ## Demo
 
-Click [here](#) to see a live demo !
+Click [here](https://nusid-jeevshdglu.now.sh) to see a live demo !
 
 ## Installation
 
@@ -45,15 +45,15 @@ for more information.
 
 ## Bundle architecture
 
-blablabla
+Under construction
 
 ## Add your own bundles
 
-blablabla
+Under construction
 
 ## Adapt NUSID generic bundles
 
-blablabla
+Under construction
 
 ## Security Issues
 
