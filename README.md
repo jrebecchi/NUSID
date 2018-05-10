@@ -30,8 +30,8 @@ Click [here](https://nusid-jeevshdglu.now.sh) to see a live demo !
 
 ## Installation
 
-This is a [Node.js](https://nodejs.org/en/) app working with [MongoDB](https://www.mongodb.com/). Before installing, [download and install Node.js](https://nodejs.org/en/download/) and [also MongoDB](https://www.mongodb.com/download-center).
-Node.js 0.10 or higher is required. You also need to have a distant [MongoDB](https://www.mongodb.com/) user or a local [MongoDB](https://www.mongodb.com/) client. 
+This is a [Node.js](https://nodejs.org/en/) app working with [MongoDB](https://www.mongodb.com/). Before installing, [download and install Node.js](https://nodejs.org/en/download/).
+Node.js 0.10 or higher is required. You also need to have a distant access or a local instatllation of [MongoDB](https://www.mongodb.com/). 
 
 Installation is done using the
 [`git clone` command](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git):
@@ -45,7 +45,7 @@ $ npm install
 
 Then you need to edit the `app.js` file to enter your email and [MongoDB](https://www.mongodb.com/) informations :
 
-* [MongoDB](https://www.mongodb.com/) configuration
+* [MongoDB](https://www.mongodb.com/) configuration (where will be stored the users) 
 
 ```js
 var dbOptions = {
@@ -55,7 +55,7 @@ var dbOptions = {
 }
 ```
 
-If you wish to use your local [MongoDB](https://www.mongodb.com/) use the following :
+### If you wish to use your local [MongoDB](https://www.mongodb.com/) use the following :
 
 ```js
 var dbOptions = {
@@ -65,7 +65,7 @@ var dbOptions = {
 }
 ```
 
-* Email configuration (from where will be sent the user space administration emails)
+* Email configuration (from where will be sent the administration emails)
 
 ```js
 
@@ -81,7 +81,7 @@ var userspaceMailOptions = {
   }
 };
 ```
-**PROTIP** You can deploy for free your NodeJS app on [Zeit](https://zeit.co)
+**PROTIP** You can deploy for free this NodeJS app on [Zeit](https://zeit.co)
 
 **PROTIP** You can have a free MongoDB database on [MLab](https://mlab.com/)
 
