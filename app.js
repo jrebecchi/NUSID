@@ -7,7 +7,7 @@ var userspaceBundle = require('./bundles/UserspaceBundle/UserspaceBundle');
 var mainBundle = require('./bundles/MainBundle/MainBundle');
 var myOwnBundle = require('./bundles/MyOwnBundle/MyOwnBundle');
 
-//enter your mongoDB database connection options for the userspace
+//Enter your mongoDB database connection options for the userspace
 var dbOptions = {
 	hostname :"dbuser:dbpassword@host.com",
   port :"19150",

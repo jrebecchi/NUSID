@@ -26,22 +26,64 @@ If you are an idle developer NUSID is made for you !
 
 ## Demo
 
-Click [here](https://nusid-jeevshdglu.now.sh) to see a live demo !
+Click [here](https://nusid-jeevshdglu.now.sh){:target="_blank"} to see a live demo !
 
 ## Installation
 
 This is a [Node.js](https://nodejs.org/en/) app working with [MongoDB](https://www.mongodb.com/). Before installing, [download and install Node.js](https://nodejs.org/en/download/) and [also MongoDB](https://www.mongodb.com/download-center).
-Node.js 0.10 or higher is required.
+Node.js 0.10 or higher is required. You also need to have a distant [MongoDB](https://www.mongodb.com/) user or a local [MongoDB](https://www.mongodb.com/) client. 
 
 Installation is done using the
+[`git clone` command](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git):
 [`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
 ```bash
-$ npm install express
+$ git clone https://github.com/JohannC/NUSID
+$ cd NUSID
+$ npm install
 ```
 
-Follow [our installing guide](http://expressjs.com/en/starter/installing.html)
-for more information.
+Then you need to edit the [`app.js`] file to enter your email and [MongoDB](https://www.mongodb.com/) informations :
+
+* [MongoDB](https://www.mongodb.com/) configuration
+
+```js
+var dbOptions = {
+	hostname :"dbuser:dbpassword@yourhost.com",
+  port :"XXXXX",
+	database : "YourDataBaseName"
+}
+```
+
+If you wish to use your local [MongoDB](https://www.mongodb.com/) use the following :
+
+```js
+var dbOptions = {
+	hostname :"localhost",
+  port :"27017",
+	database : "users"
+}
+```
+
+* Email configuration (from where will be sent the user space administration emails)
+
+```js
+
+var userspaceMailOptions = {
+  from: 'myemail@myhost.com', //email address
+  host: 'smtp.myhost.com', // hostname 
+  secureConnection: true, // use SSL 
+  port: 465, // port for secure SMTP 
+  transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts 
+  auth: {
+    user: 'username', //email login
+    pass: 'mypassword' //email password
+  }
+};
+```
+**PROTIP** You can deploy for free your NodeJS app on [Zeit](https://zeit.co)
+**PROTIP** You can have a free MongoDB database on [MLab](https://mlab.com/)
+
 
 ## Bundle architecture
 
