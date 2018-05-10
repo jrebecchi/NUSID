@@ -68,7 +68,6 @@ var dbOptions = {
 * Email configuration (from where will be sent the administration emails)
 
 ```js
-
 var userspaceMailOptions = {
   from: 'myemail@myhost.com', //email address
   host: 'smtp.myhost.com', // hostname 
@@ -81,9 +80,12 @@ var userspaceMailOptions = {
   }
 };
 ```
+
 **PROTIP** You can deploy for free this NodeJS app on [Zeit](https://zeit.co)
 
 **PROTIP** You can have a free MongoDB database on [MLab](https://mlab.com/)
+
+**PROTIP** You can use a gmail email by [allowing less secure app](https://myaccount.google.com/lesssecureapps)
 
 
 ## Bundle architecture
