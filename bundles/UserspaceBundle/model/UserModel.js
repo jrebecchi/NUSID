@@ -47,7 +47,7 @@ module.exports = function(options) {
     }
 
     function hash(data, salt, cb) {
-        crypto.pbkdf2(data, salt, HASH_ITERATIONS, HASH_LENGTH, function(err, hash) {
+        crypto.pbkdf2(data, salt, HASH_ITERATIONS, HASH_LENGTH, 'sha512', function(err, hash) {
             if (err) {
                 cb(err);
                 return;
@@ -75,23 +75,23 @@ module.exports = function(options) {
 
     this.load = function load(cb) {
         if (loaded) {
-            console.warn('User management already loaded. Not reloading');
-            return;
-        }
-        db.connect(function(err) {
-            if (err) {
-                cb(err);
-                return;
-            }
-            db.loadCollection(COLLECTION, function(err) {
+            cb(null);
+        } else {
+            db.connect(function(err) {
                 if (err) {
                     cb(err);
                     return;
                 }
-                loaded = true;
-                cb(null);
+                db.loadCollection(COLLECTION, function(err) {
+                    if (err) {
+                        cb(err);
+                        return;
+                    }
+                    loaded = true;
+                    cb(null);
+                });
             });
-        });
+        }
     };
 
     this.close = function close(cb) {
