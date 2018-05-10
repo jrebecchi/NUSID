@@ -26,7 +26,7 @@ If you are an idle developer NUSID is made for you !
 
 ## Demo
 
-Click [here](https://nusid-jeevshdglu.now.sh){:target="_blank"} to see a live demo !
+Click [here](https://nusid-jeevshdglu.now.sh) to see a live demo !
 
 ## Installation
 
@@ -43,14 +43,14 @@ $ cd NUSID
 $ npm install
 ```
 
-Then you need to edit the [`app.js`] file to enter your email and [MongoDB](https://www.mongodb.com/) informations :
+Then you need to edit the `app.js` file to enter your email and [MongoDB](https://www.mongodb.com/) informations :
 
 * [MongoDB](https://www.mongodb.com/) configuration
 
 ```js
 var dbOptions = {
 	hostname :"dbuser:dbpassword@yourhost.com",
-  port :"XXXXX",
+	port :"XXXXX",
 	database : "YourDataBaseName"
 }
 ```
@@ -60,7 +60,7 @@ If you wish to use your local [MongoDB](https://www.mongodb.com/) use the follow
 ```js
 var dbOptions = {
 	hostname :"localhost",
-  port :"27017",
+	port :"27017",
 	database : "users"
 }
 ```
@@ -82,6 +82,7 @@ var userspaceMailOptions = {
 };
 ```
 **PROTIP** You can deploy for free your NodeJS app on [Zeit](https://zeit.co)
+
 **PROTIP** You can have a free MongoDB database on [MLab](https://mlab.com/)
 
 
