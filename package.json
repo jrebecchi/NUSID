@@ -15,7 +15,7 @@
     "express-mailer": "^0.3.1",
     "express-session": "^1.15.6",
     "flashify": "^0.1.2",
-    "mongodb": "^2.1.4",
+    "mongodb": "^3.0.8",
     "morgan": "^1.6.1",
     "passport": "^0.2.2",
     "passport-local": "^1.0.0",

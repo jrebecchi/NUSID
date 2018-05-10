@@ -3,6 +3,7 @@ var MongoClient = require('mongodb').MongoClient;
 module.exports = function(options) {
 
   var db;
+  var client;
   var collections = {};
 
   function nop() {}
@@ -13,18 +14,19 @@ module.exports = function(options) {
       (options.hostname || 'localhost') + ':' +
       (options.port || '27017') + '/' +
       (options.database || 'user_management');
-    MongoClient.connect(connectionString, function(err, database) {
+    MongoClient.connect(connectionString, function(err, mongoclient) {
       if (err) {
         cb(err);
         return;
       }
-      db = database;
+      client = mongoclient;
+      db = client.db(options.database);
       cb(null);
     });
   };
 
   this.disconnect = function disconnect(cb) {
-    db.close(cb);
+    client.close(cb);
   };
 
   this.loadCollection = function loadCollection(collection, cb) {
