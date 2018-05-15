@@ -26,7 +26,7 @@ If you are an idle developer NUSID is made for you!
 
 ## Demo
 
-Click [here](https://nusid-jeevshdglu.now.sh) to see a live demo!
+Click [here](https://nusid-mxmoriwkmz.now.sh/) to see a live demo!
 
 ## Installation
 
