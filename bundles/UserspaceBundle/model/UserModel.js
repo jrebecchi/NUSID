@@ -17,8 +17,8 @@ var HASH_ITERATIONS = 1000; // Number of pbkdf2 iterations
  * - database: The MongoDB database. Default: 'user_management'
  * - tokenExpiration: The amount of time, in hours, that a token is valid for. Default is 168 (a week).
  */
-module.exports = function(options) {
-
+    
+var UserModel = function(options){
     options = options || {};
 
     var tokenExpiration = 24 * 7;
@@ -96,6 +96,7 @@ module.exports = function(options) {
 
     this.close = function close(cb) {
         db.disconnect(cb);
+        loaded = false;
     };
 
     this.getUserList = function getUserList(cb) {
@@ -822,4 +823,20 @@ module.exports = function(options) {
             db.dropCollection(COLLECTION, cb);
         }
     });
-}
+};
+
+module.exports.isInitialized = false;
+module.exports.instance = null;
+
+module.exports.init = function(dbOptions){
+    this.isInitialized = true;
+    this.instance = new UserModel(dbOptions);
+};
+
+module.exports.getInstance = function(){
+    if(!this.isInitialized){
+        throw new Error('The controler has not been initialized !');
+    } else {
+        return this.instance;
+    }
+};

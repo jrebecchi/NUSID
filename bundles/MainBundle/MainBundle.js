@@ -1,8 +1,11 @@
 var exports;
-var router = require('./router/Router');
+var Router = require('./router/Router');
+var MainController = require("./controller/MainController.js");
 
 exports.enable = function(app) {
-    //Launch router
-    router.launchRouter(app);
+    //Launch controlers
+    MainController.init();
     
-}
+    //Launch router
+    Router.launchRouter(app);
+};

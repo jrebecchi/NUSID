@@ -1,8 +1,13 @@
 var exports;
-var router = require('./router/Router');
+var MyOwnController = require('./controller/MyOwnController');
+var Router = require('./router/Router');
 
 exports.enable = function(app) {
+    
+    //Launch controller
+    MyOwnController.init();
+    
     //Launch router
-    router.launchRouter(app);
+    Router.launchRouter(app);
     
 }

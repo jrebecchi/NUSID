@@ -9,10 +9,10 @@ var myOwnBundle = require('./bundles/MyOwnBundle/MyOwnBundle');
 
 //Enter your mongoDB database connection options for the userspace
 var dbOptions = {
-	hostname :"dbuser:dbpassword@host.com",
+  hostname :"dbuser:dbpassword@host.com",
   port :"19150",
-	database : "user_management"
-}
+  database : "user_management"
+};
 
 //Enter your email options for the userspace from where will be sent the emails
 //Check Express-mailer confirguration for more options (https://github.com/RGBboy/express-mailer)
