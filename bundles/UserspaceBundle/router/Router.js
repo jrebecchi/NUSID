@@ -11,7 +11,6 @@ exports.init = function(app) {
     var userspaceController = UserspaceController.getInstance();
     var userController = UserController.getInstance();
 
-    
     app.get('/register', function(req, res) {
         userspaceController.getRegister(req, res);
     });
