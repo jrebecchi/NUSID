@@ -588,7 +588,7 @@ var UserController = function(app){
         });
     };
     
-    var sendConfirmationEmail = function(req, res, confirmationToken, email, cb){
+    var sendConfirmationEmail = (req, res, confirmationToken, email, cb) => {
         this.app.mailer.send('emails/confirm_email.ejs', {
             to: email, // REQUIRED. This can be a comma delimited string just like a normal email to field.  
             subject: 'Activate your account',// REQUIRED.

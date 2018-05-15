@@ -9,6 +9,7 @@ var passport = require('passport');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var csrf = require('csurf');
 
 exports.getConfiguredApp = function(){
     app.use(express.static(path.resolve(__dirname, 'client')));
@@ -22,11 +23,13 @@ exports.getConfiguredApp = function(){
         saveUninitialized: false }));
     app.use(flashify);
     app.set('view engine', 'ejs');
-    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json());
     app.use(morgan('combined'));
     app.use(passport.initialize());
     app.use(passport.session());
+    app.use(passport.session());
+    app.use(csrf({ cookie: true }));
     
     return app;
 };

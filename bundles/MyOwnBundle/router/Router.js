@@ -1,18 +1,16 @@
 var exports;
 
 var MyOwnControler = require("../controller/MyOwnController.js");
-var csrf = require('csurf')
-var csrfProtection = csrf({ cookie: true })
+var proxy = require('connect-ensure-login');
 
-
-exports.launchRouter = function(app) {
+exports.init = function(app) {
     var myOwnControler = MyOwnControler.getInstance();
     
-    app.get('/myprivatetab', require('connect-ensure-login').ensureLoggedIn(),function(req, res){
+    app.get('/myprivatetab', proxy.ensureLoggedIn(),function(req, res){
         myOwnControler.getMyPrivateTab(req, res);
     });
     
-    app.get('/mypublictab', csrfProtection, function(req, res) {
+    app.get('/mypublictab', function(req, res) {
         myOwnControler.getMyPublicTab(req, res);
     });
     

@@ -23,5 +23,5 @@ exports.enable = function(app, expressMailOptions, dbOptions) {
     PassportAuthentification.init();
     
     //Launch rooter
-    Router.launchRouter(app, dbOptions);
+    Router.init(app, dbOptions);
 };

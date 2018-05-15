@@ -7,7 +7,7 @@ var RECOVER_PASSWORD_TOKEN_LENGTH = 64;
 var PasswordResetController = function(app){
     this.app = app;
     
-    var isFormResetFormValid = function(req, res){
+    var isFormResetFormValid = (req, res) => {
         var isFormValid = true;
         var iv = new InputValidator();
         iv.testInput(registrationCB.testEmail,req.body.email);
@@ -18,7 +18,7 @@ var PasswordResetController = function(app){
         return isFormValid;
     };
 
-    var isFormChangePasswordFormValid = function(req, res){
+    var isFormChangePasswordFormValid = (req, res) => {
         var isFormValid = true;
         var iv = new InputValidator();
         iv.testInput(registrationCB.testPassword,req.body.password);
@@ -35,7 +35,7 @@ var PasswordResetController = function(app){
         return isFormValid;
     };
     
-    var generateToken = function (cb) {
+    var generateToken = (cb) => {
         return crypto.randomBytes(RECOVER_PASSWORD_TOKEN_LENGTH, cb).toString("hex");
     };
     
@@ -192,21 +192,7 @@ var PasswordResetController = function(app){
                         console.log(err);
                         users.close();
                     });
-                    
-                    this.app.mailer.send('emails/reset_password.ejs', {
-                        to: email, // REQUIRED. This can be a comma delimited string just like a normal email to field.  
-                        subject: 'Password Recovery',// REQUIRED.
-                        updatePasswordToken: updatePasswordProperties.updatePasswordToken,
-                        host: req.headers.host,
-                      }, function (err) {
-                        if (err) {
-                            req.flash('error', "Mail not sent, an error has occured.");
-                            res.redirect('/');
-                            return;
-                        }
-                        req.flash('info', "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.");
-                        res.redirect('/login');
-                      });
+                    sendPasswordRecoveryEmail(req, res, email, updatePasswordProperties.updatePasswordToken);
                 } else {
                     //We never say to a user if an email is or is not in our database for security reasons
                     users.close();
@@ -216,6 +202,23 @@ var PasswordResetController = function(app){
             });
         });
     };
+    
+    var sendPasswordRecoveryEmail = (req, res, email, updatePasswordToken) => {
+        this.app.mailer.send('emails/reset_password.ejs', {
+            to: email, // REQUIRED. This can be a comma delimited string just like a normal email to field.  
+            subject: 'Password Recovery',// REQUIRED.
+            updatePasswordToken: updatePasswordToken,
+            host: req.headers.host,
+        }, function (err) {
+            if (err) {
+                req.flash('error', "Mail not sent, an error has occured.");
+                res.redirect('/');
+                return;
+            }
+            req.flash('info', "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.");
+            res.redirect('/login');
+        });
+    }
 };
 
 module.exports.isInitialized = false;

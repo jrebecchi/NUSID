@@ -8,6 +8,6 @@ exports.enable = function(app) {
     MyOwnController.init();
     
     //Launch router
-    Router.launchRouter(app);
+    Router.init(app);
     
 }

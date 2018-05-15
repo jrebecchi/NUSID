@@ -1,22 +1,20 @@
 var exports;
 
 var MainController = require("../controller/MainController.js");
-var csrf = require('csurf');
-var csrfProtection = csrf({ cookie: true });
+var proxy = require('connect-ensure-login');
 
-
-exports.launchRouter = function(app) {
+exports.init = function(app) {
     var mainController = MainController.getInstance();
     
-    app.get('/', csrfProtection, function(req, res) {
+    app.get('/', function(req, res) {
         mainController.getIndex(req, res);
     });
 
-    app.get('/dashboard', require('connect-ensure-login').ensureLoggedIn(),function(req, res){
+    app.get('/dashboard', proxy.ensureLoggedIn(),function(req, res){
         mainController.getDashboard(req, res);
     });
     
-    app.get('/legal', csrfProtection, function(req, res) {
+    app.get('/legal', function(req, res) {
         mainController.getLegal(req, res);
     });
     

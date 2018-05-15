@@ -1,5 +1,5 @@
 var MainController = function (){
-    var checkIfEmailConfirmed = function(req, res){
+    var checkIfEmailConfirmed = (req, res) => {
        if(!req.user.extras.emailConfirmed){
             res.flash('warning', "Please confirm your email by clicking on the link we sent you at this adress! Click <a href=\"/send_confirmation_email\">here</a> to resend the link.");
         } 

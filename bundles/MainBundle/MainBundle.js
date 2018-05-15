@@ -7,5 +7,5 @@ exports.enable = function(app) {
     MainController.init();
     
     //Launch router
-    Router.launchRouter(app);
+    Router.init(app);
 };
