@@ -1,6 +1,7 @@
 var InputValidator = require("../service/forms/InputValidatorService");
 var registrationCB = require("../service/forms/callbacks/RegistrationCallbacks");
 var UserModel = require("../model/UserModel");
+var UserspaceMailer = require('../service/mailer/UserspaceMailer');
 var crypto = require('crypto');
 var RECOVER_PASSWORD_TOKEN_LENGTH = 64;
 
@@ -204,11 +205,14 @@ var PasswordResetController = function(app){
     };
     
     var sendPasswordRecoveryEmail = (req, res, email, updatePasswordToken) => {
-        this.app.mailer.send('emails/reset_password.ejs', {
-            to: email, // REQUIRED. This can be a comma delimited string just like a normal email to field.  
-            subject: 'Password Recovery',// REQUIRED.
-            updatePasswordToken: updatePasswordToken,
-            host: req.headers.host,
+        UserspaceMailer.getInstance().send({
+            template:'emails/reset_password.ejs', 
+            locals:{
+                updatePasswordToken: updatePasswordToken,
+                host: req.headers.host
+            },
+            email : email, 
+            subject:'Password Recovery',
         }, function (err) {
             if (err) {
                 req.flash('error', "Mail not sent, an error has occured.");
@@ -218,7 +222,7 @@ var PasswordResetController = function(app){
             req.flash('info', "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.");
             res.redirect('/login');
         });
-    }
+    };
 };
 
 module.exports.isInitialized = false;

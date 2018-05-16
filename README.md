@@ -72,13 +72,13 @@ var userspaceMailOptions = {
   host: 'smtp.myhost.com', // hostname 
   secureConnection: true, // use SSL 
   port: 465, // port for secure SMTP 
-  transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts 
   auth: {
     user: 'username', //email login
     pass: 'mypassword' //email password
   }
 };
 ```
+You can have more options for those parameters looking at the [nodemailer options](https://nodemailer.com)
 
 **TIP!** You can deploy for free this NodeJS app on [Zeit](https://zeit.co)
 

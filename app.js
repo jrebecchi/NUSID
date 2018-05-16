@@ -17,14 +17,13 @@ var dbOptions = {
 //Enter your email options for the userspace from where will be sent the emails
 //Check Express-mailer confirguration for more options (https://github.com/RGBboy/express-mailer)
 var userspaceMailOptions = {
-  from: 'myemail@myhost.com',
+  from: 'myemail@myhost.com', //email address
   host: 'smtp.myhost.com', // hostname 
   secureConnection: true, // use SSL 
   port: 465, // port for secure SMTP 
-  transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts 
   auth: {
-    user: 'myemail@myhost.com',
-    pass: 'mypassword'
+    user: 'username', //email login
+    pass: 'mypassword' //email password
   }
 };
 

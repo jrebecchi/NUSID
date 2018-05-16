@@ -1,6 +1,7 @@
 var InputValidator = require("../service/forms/InputValidatorService");
 var registrationCB = require("../service/forms/callbacks/RegistrationCallbacks");
 var UserModel = require("../model/UserModel");
+var UserspaceMailer = require('../service/mailer/UserspaceMailer');
 var crypto = require('crypto');
 var CONFIRM_EMAIL_TOKEN_LENGTH = 64;
 
@@ -589,14 +590,15 @@ var UserController = function(app){
     };
     
     var sendConfirmationEmail = (req, res, confirmationToken, email, cb) => {
-        this.app.mailer.send('emails/confirm_email.ejs', {
-            to: email, // REQUIRED. This can be a comma delimited string just like a normal email to field.  
-            subject: 'Activate your account',// REQUIRED.
-            confirmationToken: confirmationToken,
-            host: req.headers.host,
-          }, function (err) {
-              cb(err);
-          });
+        UserspaceMailer.getInstance().send({
+            email: email, 
+            subject: 'Activate your account', 
+            template: 'emails/confirm_email.ejs', 
+            locals: {
+                confirmationToken: confirmationToken,
+                host: req.headers.host
+            },
+        }, cb);
     };
 };
 
