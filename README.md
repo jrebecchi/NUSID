@@ -78,7 +78,7 @@ var userspaceMailOptions = {
   }
 };
 ```
-You can have more options for those parameters looking at the [nodemailer options](https://nodemailer.com)
+You can have more options for the email parameters looking at the [nodemailer options](https://nodemailer.com).
 
 **TIP!** You can deploy for free this NodeJS app on [Zeit](https://zeit.co)
 
