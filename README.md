@@ -94,7 +94,8 @@ $ node app.js
 
 ## Bundle architecture
 
-Under construction
+NUSID is architectured in bundles. A bundle is simply a component which contains :
+* A router : handling some given routes 
 
 ## Add your own bundles
 
