@@ -3,8 +3,6 @@ var UserModel = require("../../model/UserModel");
 var Strategy = require('passport-local').Strategy;
 
 module.exports.init = function(){
-    
-    
     // Configure the local strategy for use by Passport.
     // The local strategy require a `verify` function which receives the credentials
     // (`username` and `password`) submitted by the user.  The function must verify
@@ -12,7 +10,7 @@ module.exports.init = function(){
     // will be set at `req.user` in route handlers after authentication.
     passport.use(new Strategy(
         function(email, password, cb) {
-            var users = UserModel.getInstance(); 
+            var users = new UserModel();
             users.load(function(err) {
                 if (err) {
                     users.close();
@@ -49,7 +47,7 @@ module.exports.init = function(){
     // serializing, and querying the user record by ID from the database when
     // deserializing.
     passport.serializeUser(function(user, cb) {
-        var users = UserModel.getInstance(); 
+        var users = new UserModel();
         users.load(function(err) {
             if (err) {
                 users.close();
@@ -68,7 +66,7 @@ module.exports.init = function(){
     });
 
     passport.deserializeUser(function(token, cb) {
-        var users = UserModel.getInstance(); 
+        var users = new UserModel();
         users.load(function(err) {
             if (err) {
                 users.close();

@@ -8,7 +8,7 @@ var mainBundle = require('./bundles/MainBundle/MainBundle');
 var myOwnBundle = require('./bundles/MyOwnBundle/MyOwnBundle');
 
 //Enter your mongoDB database connection options for the userspace
-var dbOptions = {
+global.userDBOptions = {
   hostname :"dbuser:dbpassword@host.com",
   port :"19150",
   database : "user_management"
@@ -16,7 +16,7 @@ var dbOptions = {
 
 //Enter your email options for the userspace from where will be sent the emails
 //Check nodemailer confirguration for more options (https://nodemailer.com)
-var userspaceMailOptions = {
+global.userspaceMailOptions = {
   from: 'myemail@myhost.com', //email address
   host: 'smtp.myhost.com', // hostname 
   secureConnection: true, // use SSL 
@@ -28,9 +28,9 @@ var userspaceMailOptions = {
 };
 
 //Enable your bundles
-userspaceBundle.enable(app, userspaceMailOptions, dbOptions);
-mainBundle.enable(app);
-myOwnBundle.enable(app);
+userspaceBundle.init(app);
+mainBundle.init(app);
+myOwnBundle.init(app);
 
 //Add the view folders of your bundle
 app.set('views', [

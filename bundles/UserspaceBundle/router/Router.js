@@ -7,24 +7,21 @@ var passport = require('passport');
 var proxy = require('connect-ensure-login');
 
 exports.init = function(app) {
-    var passwordResetController = PasswordResetController.getInstance();
-    var userspaceController = UserspaceController.getInstance();
-    var userController = UserController.getInstance();
 
     app.get('/register', function(req, res) {
-        userspaceController.getRegister(req, res);
+        UserspaceController.getRegister(req, res);
     });
     app.get('/login', function(req, res) {
-        userspaceController.getLogin(req, res);
+        UserspaceController.getLogin(req, res);
     });
     app.get('/email-exists', function(req, res) {
-        userController.getCheckEmailExists(req, res);
+        UserController.getCheckEmailExists(req, res);
     });
     app.get('/username-exists', function(req, res) {
-        userController.getCheckUsernameExists(req, res);
+        UserController.getCheckUsernameExists(req, res);
     });
     app.post('/register', function(req, res) {
-        userController.createUser(req, res);
+        UserController.postCreateUser(req, res);
     });
     app.post('/login',
         passport.authenticate('local', {
@@ -32,54 +29,54 @@ exports.init = function(app) {
             failureFlash: 'Invalid username or password.', 
         }),
         function(req, res) {
-            userspaceController.postLogin(req, res);
+            UserspaceController.postLogin(req, res);
     });
     
     app.get('/logout', function(req, res){
-        userspaceController.getLogout(req, res);
+        UserspaceController.getLogout(req, res);
     });
     
     app.get('/send_confirmation_email', proxy.ensureLoggedIn(),function(req, res){
-        userController.getSendConfirmationEmail(req, res);
+        UserController.getSendConfirmationEmail(req, res);
     });
     
     app.post('/password_reset', function(req, res){
-        passwordResetController.resetPassword(req, res);
+        PasswordResetController.postResetPassword(req, res);
     });
     
     app.get('/password_reset', function(req, res){
-        passwordResetController.showPasswordRecoverForm(req, res);
+        PasswordResetController.getShowPasswordRecoveryForm(req, res);
     });
     
     app.get('/password_renew', function(req, res){
-        passwordResetController.showChangePasswordForm(req, res);
+        PasswordResetController.getShowChangePasswordForm(req, res);
     });
     
     app.post('/password_renew', function(req, res){
-        passwordResetController.changePassword(req, res);
+        PasswordResetController.postChangePassword(req, res);
     });
     app.get('/confirm_email', function(req, res){
-        userController.getConfirmEmail(req, res);
+        UserController.getConfirmEmail(req, res);
     });
     app.get('/settings', proxy.ensureLoggedIn(),function(req, res){
-        userspaceController.getSettings(req, res);
+        UserspaceController.getSettings(req, res);
     });
     app.post('/modify-password', proxy.ensureLoggedIn(),function(req, res){
-        userController.postModifyPassword(req, res);
+        UserController.postModifyPassword(req, res);
     });
     app.post('/modify-username', proxy.ensureLoggedIn(),function(req, res){
-        userController.postModifyUsername(req, res);
+        UserController.postModifyUsername(req, res);
     });
     app.post('/modify-email', proxy.ensureLoggedIn(),function(req, res){
-        userController.postModifyEmail(req, res);
+        UserController.postModifyEmail(req, res);
     });
     app.post('/modify-firstname', proxy.ensureLoggedIn(),function(req, res){
-        userController.postModifyFirstName(req, res);
+        UserController.postModifyFirstName(req, res);
     });
     app.post('/modify-lastname', proxy.ensureLoggedIn(),function(req, res){
-        userController.postModifyLastName(req, res);
+        UserController.postModifyLastName(req, res);
     });
     app.post('/delete-account', proxy.ensureLoggedIn(),function(req, res){
-        userController.postDeleteAccount(req, res);
+        UserController.postDeleteAccount(req, res);
     });
 };

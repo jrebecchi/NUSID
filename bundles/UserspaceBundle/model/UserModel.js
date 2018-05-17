@@ -9,7 +9,6 @@ var TOKEN_LENGTH = 64;
 var HASH_LENGTH = 64; // Length of the hash, in bytes
 var HASH_ITERATIONS = 1000; // Number of pbkdf2 iterations
 
-
 /*
  * Options:
  * - hostname: The MongoDB server hostname. Default: 'localhost'
@@ -18,8 +17,8 @@ var HASH_ITERATIONS = 1000; // Number of pbkdf2 iterations
  * - tokenExpiration: The amount of time, in hours, that a token is valid for. Default is 168 (a week).
  */
     
-var UserModel = function(options){
-    options = options || {};
+module.exports = function() {
+    var options = global.userDBOptions || {};
 
     var tokenExpiration = 24 * 7;
     if (typeof options.tokenExpiration == 'number') {
@@ -823,20 +822,4 @@ var UserModel = function(options){
             db.dropCollection(COLLECTION, cb);
         }
     });
-};
-
-module.exports.isInitialized = false;
-module.exports.instance = null;
-
-module.exports.init = function(dbOptions){
-    this.isInitialized = true;
-    this.instance = new UserModel(dbOptions);
-};
-
-module.exports.getInstance = function(){
-    if(!this.isInitialized){
-        throw new Error('The controler has not been initialized !');
-    } else {
-        return this.instance;
-    }
 };
