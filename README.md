@@ -95,7 +95,11 @@ $ node app.js
 ## Bundle architecture
 
 NUSID is architectured in bundles. A bundle is simply a component which contains :
-* A router : handling some given routes 
+* Router : Redirecting some given routes to its different controllers
+* Controlers : Responsible for sending responses the user requests
+* Models : To represent the data retrieved from the database and offer different treatment functions
+* Services : Any utility methods that can be used anywhere in the bundle
+* Views : template views that are sent back by the controllers to the users
 
 ## Add your own bundles
 
