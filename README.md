@@ -86,6 +86,11 @@ You can have more options for the email parameters looking at the [nodemailer op
 
 **TIP!** You can use a Gmail email by [allowing less secure app](https://myaccount.google.com/lesssecureapps)
 
+Finally launch this app with :
+
+```bash
+$ node app.js
+```
 
 ## Bundle architecture
 
