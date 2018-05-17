@@ -15,7 +15,7 @@ var dbOptions = {
 };
 
 //Enter your email options for the userspace from where will be sent the emails
-//Check Express-mailer confirguration for more options (https://github.com/RGBboy/express-mailer)
+//Check nodemailer confirguration for more options (https://nodemailer.com)
 var userspaceMailOptions = {
   from: 'myemail@myhost.com', //email address
   host: 'smtp.myhost.com', // hostname 
