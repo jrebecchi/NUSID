@@ -228,7 +228,7 @@ Init the bundle line 33:
 ```javascript
 myOwnBundle.init(app);
 ```
-Add its view folder in the EJS repository:
+Add its view folder in the EJS repository line 39:
 ```javascript
   path.join(__dirname+'/bundles/MyOwnBundle', 'views')
 
