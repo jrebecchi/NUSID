@@ -166,9 +166,9 @@ We use here the `include` mechanism of [EJS](http://ejs.co/) to import the heade
 <% include partials/footer %>
 <% include partials/end %>
 ```
-    We do the same for the private page.
+We do the same for the private page.
 
-* Step 5: Edit the controller `MyOwnController.js` that will serve those 2 pages
+* Step 5: Edit the controller `MyOwnController.js` that will return those templates we just created
 
 ```javascript
 var exports;
@@ -181,6 +181,7 @@ exports.getMyPublicTab = function (req, res){
     res.render('pages/my-public-tab.ejs', {csrfToken: req.csrfToken() });
 };
 ```
+For the public page, you need to include a crsfToken to enable the different forms present on the page for unconnected users.
 
 * Step 6: Edit the router `Router.js` that will serve those 2 pages
 
@@ -200,6 +201,8 @@ exports.init = function(app) {
         MyOwnControler.getMyPublicTab(req, res);
     });
 };
+
+For the private page you add the `proxy.ensureLoggedIn()` middleware to ensure that the user is logged in to access this page.
 
 By taping `yourwebsite.com/mypublictab` a user will acces the public page you just created.
 
