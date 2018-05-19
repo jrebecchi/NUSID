@@ -150,7 +150,7 @@ $ touch bundles/MyOwnBundle/views/pages/my-public-tab.ejs
 ```
 We use here the `include` mechanism of [EJS](http://ejs.co/) to import the headers and footers of the page.
   
-  * Step 4.2: Edit the `my-private-tab.ejs` template
+    * Step 4.2: Edit the `my-private-tab.ejs` template
 ```html
 <% include partials/head %>
 <% include partials/header %>
