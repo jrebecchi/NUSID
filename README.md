@@ -103,7 +103,130 @@ NUSID is architectured in bundles using the MVC pattern. A bundle is simply a co
 
 ## Add your own bundles
 
-Under construction
+Here you are going to learn how to add our own bundles and extend this userspace to create your own app ! As an exemple we are going to create a bundle named MyOwnBundle containing answering to 2 routes, one to a public page and one to a private that you can see only by being connected as a user.
+
+* Step 1: Create your bundle folder under the `/bundles` directory
+
+```bash
+$ mkdir bundles/MyOwnBundle
+```
+
+* Step 2: Create the bundle structure with a `controller`, `model`, `router`, `service` and `views` folder, 
+
+```bash
+$ mkdir bundles/MyOwnBundle/controller 
+$ mkdir bundles/MyOwnBundle/model 
+$ mkdir bundles/MyOwnBundle/router 
+$ mkdir bundles/MyOwnBundle/service 
+$ mkdir bundles/MyOwnBundle/views
+```
+
+* Step 3: Create the entry file of your bundle, the router, a controller and the 2 different views for the public page and the private page 
+
+```bash
+$ touch bundles/MyOwnBundle.js 
+$ touch bundles/MyOwnBundle/router/Router.js
+$ touch bundles/MyOwnBundle/controller/MyOwnController.js
+$ touch bundles/MyOwnBundle/views/pages/my-private-tab.ejs
+$ touch bundles/MyOwnBundle/views/pages/my-public-tab.ejs
+```
+* Step 4: We are now going to create the public and the private template pages
+  
+  ** Step 4.1: edit the `my-public-tab.ejs` template
+```html
+<% include partials/head %>
+<% include partials/header %>
+
+<div class="container">
+	<div id="content">
+		<h1>This is a public page</h1>
+		<hr>
+		<p>You don't need to register to see this !</p>
+	</div>
+</div>
+		
+<% include partials/footer %>
+<% include partials/end %>
+```
+    We use here the `include` mechanism of [EJS](http://ejs.co/) to import the header and footer of the page.
+
+  ** Step 4.2: edit the `my-private-tab.ejs` template
+```html
+<% include partials/head %>
+<% include partials/header %>
+
+<div class="container">
+	<div id="content">
+		<h1>This is a public page</h1>
+		<hr>
+		<p>You don't need to register to see this !</p>
+	</div>
+</div>
+		
+<% include partials/footer %>
+<% include partials/end %>
+```
+    We do the same for the private page.
+
+* Step 5:  edit the controller `MyOwnController.js` that will serve those 2 pages 
+
+```javascript
+var exports;
+
+exports.getMyPrivateTab = function (req, res){
+    res.render('pages/my-private-tab.ejs', { user: req.user });
+};
+
+exports.getMyPublicTab = function (req, res){
+    res.render('pages/my-public-tab.ejs', {csrfToken: req.csrfToken() });
+};
+```
+
+* Step 6: edit the router `Router.js` that will serve those 2 pages
+
+```javascript
+var exports;
+
+var MyOwnControler = require("../controller/MyOwnController.js");
+var proxy = require('connect-ensure-login');
+
+exports.init = function(app) {
+
+    app.get('/myprivatetab', proxy.ensureLoggedIn(),function(req, res){
+        MyOwnControler.getMyPrivateTab(req, res);
+    });
+    
+    app.get('/mypublictab', function(req, res) {
+        MyOwnControler.getMyPublicTab(req, res);
+    });
+};
+```
+* Step 7: edit the bundle launcher `MyOwnController.js` that will serve those 2 pages
+
+```javascript
+var exports;
+var Router = require('./router/Router');
+
+exports.init = function(app) {
+    //Launch router
+    Router.init(app);
+};
+```
+* Step 8: configure the `app.js` file
+
+Import the bundle line 8:
+```javascript
+var myOwnBundle = require('./bundles/MyOwnBundle/MyOwnBundle');
+```
+Init the bundle line 33:
+```javascript
+myOwnBundle.init(app);
+```
+Add its view folder in the EJS repository:
+```javascript
+  path.join(__dirname+'/bundles/MyOwnBundle', 'views')
+
+```
 
 ## Adapt NUSID
 
