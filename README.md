@@ -132,7 +132,7 @@ $ touch bundles/MyOwnBundle/views/pages/my-public-tab.ejs
 ```
 * Step 4: We are now going to create the public and the private template pages
   
-..* Step 4.1: Edit the `my-public-tab.ejs` template as followed
+  * Step 4.1: Edit the `my-public-tab.ejs` template as followed
 ```html
 <% include partials/head %>
 <% include partials/header %>
@@ -150,7 +150,7 @@ $ touch bundles/MyOwnBundle/views/pages/my-public-tab.ejs
 ```
     We use here the `include` mechanism of [EJS](http://ejs.co/) to import the headers and footers of the page.
 
-..* Step 4.2: Edit the `my-private-tab.ejs` template as followed
+  * Step 4.2: Edit the `my-private-tab.ejs` template
 ```html
 <% include partials/head %>
 <% include partials/header %>
@@ -168,7 +168,7 @@ $ touch bundles/MyOwnBundle/views/pages/my-public-tab.ejs
 ```
     We do the same for the private page.
 
-* Step 5: Edit the controller `MyOwnController.js` that will serve those 2 pages as followed
+* Step 5: Edit the controller `MyOwnController.js` that will serve those 2 pages
 
 ```javascript
 var exports;
@@ -182,7 +182,7 @@ exports.getMyPublicTab = function (req, res){
 };
 ```
 
-* Step 6: Edit the router `Router.js` that will serve those 2 pages as followed
+* Step 6: Edit the router `Router.js` that will serve those 2 pages
 
 ```javascript
 var exports;
@@ -204,7 +204,7 @@ exports.init = function(app) {
 By taping `yourwebsite.com/mypublictab` a user will acces the public page you just created.
 
 ```
-* Step 7: Edit the bundle launcher `MyOwnController.js` that launch the rooter as followed
+* Step 7: Edit the bundle launcher `MyOwnController.js` to init the rooter
 
 ```javascript
 var exports;
