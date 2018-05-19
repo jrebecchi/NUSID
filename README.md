@@ -94,7 +94,7 @@ $ node app.js
 
 ## Bundle architecture
 
-NUSID is architectured in bundles using the MVC pattern. A bundle is simply a component which contains :
+NUSID is designed in bundles using the MVC pattern. A bundle is simply a component which contains :
 * A router : Redirecting some given routes to its different controllers
 * Controlers : Responsible for sending responses the user requests
 * Models : To represent the data retrieved from the database and offer different treatment functions
@@ -103,15 +103,15 @@ NUSID is architectured in bundles using the MVC pattern. A bundle is simply a co
 
 ## Add your own bundles
 
-Here you are going to learn how to add our own bundles and extend this userspace to create your own app ! As an exemple we are going to create a bundle named MyOwnBundle containing answering to 2 routes, one to a public page and one to a private that you can see only by being connected as a user.
+Here you are going to learn how to add our own bundles and extend this userspace to create your own app ! As an exemple we are going to create a bundle named MyOwnBundle containing 2 routes, one to a public page and one to a private page that you can see only by being connected as a user.
 
-* Step 1: Create your bundle folder under the `/bundles` directory
+* Step 1: Create your bundle folder under the `bundles` directory
 
 ```bash
 $ mkdir bundles/MyOwnBundle
 ```
 
-* Step 2: Create the bundle structure with a `controller`, `model`, `router`, `service` and `views` folder, 
+* Step 2: Create the bundle structure with a `controller`, `model`, `router`, `service` and `views` folder 
 
 ```bash
 $ mkdir bundles/MyOwnBundle/controller 
@@ -132,7 +132,7 @@ $ touch bundles/MyOwnBundle/views/pages/my-public-tab.ejs
 ```
 * Step 4: We are now going to create the public and the private template pages
   
-  ** Step 4.1: edit the `my-public-tab.ejs` template
+..* Step 4.1: Edit the `my-public-tab.ejs` template as followed
 ```html
 <% include partials/head %>
 <% include partials/header %>
@@ -148,9 +148,9 @@ $ touch bundles/MyOwnBundle/views/pages/my-public-tab.ejs
 <% include partials/footer %>
 <% include partials/end %>
 ```
-    We use here the `include` mechanism of [EJS](http://ejs.co/) to import the header and footer of the page.
+    We use here the `include` mechanism of [EJS](http://ejs.co/) to import the headers and footers of the page.
 
-  ** Step 4.2: edit the `my-private-tab.ejs` template
+..* Step 4.2: Edit the `my-private-tab.ejs` template as followed
 ```html
 <% include partials/head %>
 <% include partials/header %>
@@ -168,7 +168,7 @@ $ touch bundles/MyOwnBundle/views/pages/my-public-tab.ejs
 ```
     We do the same for the private page.
 
-* Step 5:  edit the controller `MyOwnController.js` that will serve those 2 pages 
+* Step 5: Edit the controller `MyOwnController.js` that will serve those 2 pages as followed
 
 ```javascript
 var exports;
@@ -182,7 +182,7 @@ exports.getMyPublicTab = function (req, res){
 };
 ```
 
-* Step 6: edit the router `Router.js` that will serve those 2 pages
+* Step 6: Edit the router `Router.js` that will serve those 2 pages as followed
 
 ```javascript
 var exports;
@@ -200,8 +200,11 @@ exports.init = function(app) {
         MyOwnControler.getMyPublicTab(req, res);
     });
 };
+
+By taping `yourwebsite.com/mypublictab` a user will acces the public page you just created.
+
 ```
-* Step 7: edit the bundle launcher `MyOwnController.js` that will serve those 2 pages
+* Step 7: Edit the bundle launcher `MyOwnController.js` that launch the rooter as followed
 
 ```javascript
 var exports;
@@ -212,7 +215,7 @@ exports.init = function(app) {
     Router.init(app);
 };
 ```
-* Step 8: configure the `app.js` file
+* Step 8: configure the `app.js` file to integrate your new bundle
 
 Import the bundle line 8:
 ```javascript
