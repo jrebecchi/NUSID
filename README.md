@@ -203,9 +203,9 @@ exports.init = function(app) {
 };
 ```
 
-For the private page add the `proxy.ensureLoggedIn()` middleware to ensure that the user is logged in to access this page. By taping `yourwebsite.com/mypublictab` a user will acces the public page you just created.
+For the private page, add the `proxy.ensureLoggedIn()` middleware to ensure that the user is logged in to access this page. By taping `yourwebsite.com/mypublictab` a user will acces the public page you just created.
 
-* Step 7: Edit the `./bundles/MainBundle/views/partials/header.ejs` to add some buttons on the header nav-bar redirecting to those 2 pages 
+* Step 7: Edit the `./bundles/MainBundle/views/partials/header.ejs` file to add some buttons on the header nav-bar redirecting to those 2 pages 
 Add the following on line 14 :
 
 ```html
