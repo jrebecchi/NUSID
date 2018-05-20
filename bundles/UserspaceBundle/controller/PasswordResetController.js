@@ -1,5 +1,5 @@
 var InputValidator = require("../service/forms/InputValidatorService");
-var registrationCB = require("../service/forms/callbacks/RegistrationCallbacks");
+var registrationCB = require("../service/forms/callbacks/ValidationCallbacks");
 var UserModel = require("../model/UserModel");
 var UserspaceMailer = require('../service/mailer/UserspaceMailer');
 var crypto = require('crypto');
