@@ -119,12 +119,13 @@ $ mkdir bundles/MyOwnBundle/model
 $ mkdir bundles/MyOwnBundle/router 
 $ mkdir bundles/MyOwnBundle/service 
 $ mkdir bundles/MyOwnBundle/views
+$ mkdir bundles/MyOwnBundle/views/pages
 ```
 
 * Step 3: Create the entry file of your bundle, the router, a controller and the 2 different views for the public page and the private page 
 
 ```bash
-$ touch bundles/MyOwnBundle.js 
+$ touch bundles/MyOwnBundle/MyOwnBundle.js 
 $ touch bundles/MyOwnBundle/router/Router.js
 $ touch bundles/MyOwnBundle/controller/MyOwnController.js
 $ touch bundles/MyOwnBundle/views/pages/my-private-tab.ejs
