@@ -22,7 +22,7 @@ If you are an idle developer NUSID is made for you!
   * CSRF protection
   * Flash message manager
   * Responsive design 
-  * Architectured in bundles similar to the [Symfony](https://symfony.com/) framework
+  * Designed in bundles similar to the [Symfony](https://symfony.com/) framework
 
 ## Demo
 
@@ -133,40 +133,40 @@ $ touch bundles/MyOwnBundle/views/pages/my-public-tab.ejs
 * Step 4: We are now going to create the public and the private template pages
   
   * Step 4.1: Edit the `my-public-tab.ejs` template as followed
-```html
-<% include partials/head %>
-<% include partials/header %>
-
-<div class="container">
-	<div id="content">
-		<h1>This is a public page</h1>
-		<hr>
-		<p>You don't need to register to see this !</p>
-	</div>
-</div>
-		
-<% include partials/footer %>
-<% include partials/end %>
-```
-We use here the `include` mechanism of [EJS](http://ejs.co/) to import the headers and footers of the page.
+  ```html
+  <% include partials/head %>
+  <% include partials/header %>
+  
+  <div class="container">
+  	<div id="content">
+  		<h1>This is a public page</h1>
+  		<hr>
+  		<p>You don't need to register to see this !</p>
+  	</div>
+  </div>
+  		
+  <% include partials/footer %>
+  <% include partials/end %>
+  ```
+  We use here the `include` mechanism of [EJS](http://ejs.co/) to import the headers and footers of the page.
   
   * Step 4.2: Edit the `my-private-tab.ejs` template
-```html
-<% include partials/head %>
-<% include partials/header %>
-
-<div class="container">
-	<div id="content">
-		<h1>This is a public page</h1>
-		<hr>
-		<p>You don't need to register to see this !</p>
-	</div>
-</div>
-		
-<% include partials/footer %>
-<% include partials/end %>
-```
-We do the same for the private page.
+  ```html
+  <% include partials/head %>
+  <% include partials/header %>
+  
+  <div class="container">
+  	<div id="content">
+  		<h1>This is a public page</h1>
+  		<hr>
+  		<p>You don't need to register to see this !</p>
+  	</div>
+  </div>
+  		
+  <% include partials/footer %>
+  <% include partials/end %>
+  ```
+  We do the same for the private page.
 
 * Step 5: Edit the controller `MyOwnController.js` that will return those templates we just created
 
@@ -239,6 +239,7 @@ Add its view folder in the EJS repository line 39:
   path.join(__dirname+'/bundles/MyOwnBundle', 'views')
 
 ```
+This example bundle is already included in the actual Nusid repository. Feel free to delete it or modify it!
 
 ## Adapt NUSID
 
