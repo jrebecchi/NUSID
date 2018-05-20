@@ -271,13 +271,13 @@ This example bundle is already included in the actual Nusid repository. Feel fre
 
 * How to change the input validation rules
   
-  You can change the input validation rules by editing their validation callbacks located in `./bundles/UserspaceBundle/service/forms/callbacks/ValidationCallbacks.js`. Those functions have to return an object with 2 properties :
+  You can change the input validation rules by editing the validation callbacks located in `./bundles/UserspaceBundle/service/forms/callbacks/ValidationCallbacks.js`. Those functions have to return an object with 2 properties :
   * `hasError`: if the input has an error
   * `errorMsg`: the error message to display to the user if `hasError` is `true`
 
 * How to change the general behavior of the UserspaceBundle
 
-  You have to modify the differents controllers located in `./bundles/UserspaceBundle/controller` and also its uses model `./bundles/UserspaceBundle/model/UserModel.js`. Feel free to contact me if you need any information.
+  You have to modify the different controllers located in `./bundles/UserspaceBundle/controller` and also its user model `./bundles/UserspaceBundle/model/UserModel.js`. Feel free to contact me if you need any information.
 
 ## Security Issues
 
