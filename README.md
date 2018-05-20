@@ -103,7 +103,7 @@ NUSID is designed in bundles using the MVC pattern. A bundle is simply a compone
 
 ## Add your own bundles
 
-Here you are going to learn how to add our own bundles and extend this userspace to create your own app ! As an exemple we are going to create a bundle named MyOwnBundle containing 2 routes, one to a public page and one to a private page that you can see only by being connected as a user.
+Here you are going to learn how to add our own bundles and extend this user space to create your own app ! As an exemple we are going to create a bundle named MyOwnBundle containing 2 routes, one to a public page and one to a private page that you can see only by being connected as a user.
 
 * Step 1: Create your bundle folder under the `bundles` directory
 
@@ -201,13 +201,21 @@ exports.init = function(app) {
         MyOwnControler.getMyPublicTab(req, res);
     });
 };
+```
 
 For the private page you add the `proxy.ensureLoggedIn()` middleware to ensure that the user is logged in to access this page.
 
 By taping `yourwebsite.com/mypublictab` a user will acces the public page you just created.
 
+* Step 7: Edit the `./bundles/MainBundle/views/partials/header.ejs` to add some buttons on the header nav-bar redirecting to those 2 pages 
+Add the following on line 14 :
+
+```html
+<li><a href="/mypublictab">My public tab</a></li>
+<li><a href="/myprivatetab">My private tab</a></li>
 ```
-* Step 7: Edit the bundle launcher `MyOwnController.js` to init the rooter
+
+* Step 8: Edit the bundle launcher `MyOwnController.js` to init the rooter
 
 ```javascript
 var exports;
@@ -218,7 +226,7 @@ exports.init = function(app) {
     Router.init(app);
 };
 ```
-* Step 8: configure the `app.js` file to integrate your new bundle
+* Step 9: configure the `app.js` file to integrate your new bundle
 
 Import the bundle line 8:
 ```javascript
