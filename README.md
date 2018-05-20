@@ -245,7 +245,7 @@ This example bundle is already included in the actual Nusid repository. Feel fre
 
 * How to modify the general design
 
-You can modify the design and appearance of Nusid by modifying the style sheet located in `./client/css/style.css` and also the different partial templates present in all the pages. Those are located in the MainBundle : `./bundles/MainBundle/views/partials`. 
+  You can modify the design and appearance of Nusid by modifying the style sheet located in `./client/css/style.css` and also the different partial templates present in all the pages. Those are located in the MainBundle : `./bundles/MainBundle/views/partials`. 
   * `head.ejs` for the metadata and Javascript/CSS Style sheets imports
   * `hearder.ejs` for the menu nav-bar of the page
   * `footer.ejs` for the footer of the page
