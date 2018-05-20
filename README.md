@@ -243,7 +243,29 @@ This example bundle is already included in the actual Nusid repository. Feel fre
 
 ## Adapt NUSID
 
-Under construction
+* How to modify the general design
+
+You can modify the design and appearance of Nusid by modifying the style sheet located in `./client/css/style.css` and also the different partial templates present in all the pages. Those are located in the MainBundle : `./bundles/MainBundle/views/partials`. 
+  * `head.ejs` for the metadata and Javascript/CSS Style sheets imports
+  * `hearder.ejs` for the menu nav-bar of the page
+  * `footer.ejs` for the footer of the page
+  * `end.ejs` for the page closing, contains others Javascript/CSS Style sheets imports
+  * `alerts.ejs` for the flash messenger.
+
+* How to modify the client-side input form validation
+
+The client-side input form validation use 2 different technologies : [AngularJS](https://angularjs.org/) and [Browserify](http://browserify.org/).
+
+You will find Angular validation animations in the form templates located here: `./bundles/UserspaceBundle/views/forms` and its Javascript code in this file : `./client/js/app.js`.
+
+Thanks to [Browserify](http://browserify.org/) the Angular Javascript code in `app.js` can use the `require` function and import the input validation rules from the server located in `./bundles/UserspaceBundle/service/forms`.
+
+If you want to modify the code in `app.js` you will have to [install browserify](http://browserify.org/#install) which provide this `require` function and every time you modify this code you will have to run the following command in a terminal :
+
+```bash
+$ browserify client/js/app.js -o client/js/app-browserified.js
+```
+The web pages will indeed import the `app-browserified.js` file which will convert the require imports into something the browser can read.
 
 ## Security Issues
 
