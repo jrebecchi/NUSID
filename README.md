@@ -254,18 +254,29 @@ This example bundle is already included in the actual Nusid repository. Feel fre
 
 * How to modify the client-side input form validation
 
-The client-side input form validation use 2 different technologies : [AngularJS](https://angularjs.org/) and [Browserify](http://browserify.org/).
+  The client-side input form validation use 2 different technologies : [AngularJS](https://angularjs.org/) and [Browserify](http://browserify.org/).
 
-You will find Angular validation animations in the form templates located here: `./bundles/UserspaceBundle/views/forms` and its Javascript code in this file : `./client/js/app.js`.
+  You will find the Angular input validation animations in the form templates located here: `./bundles/UserspaceBundle/views/forms` and its Javascript code in this file : `./client/js/app.js`.
 
-Thanks to [Browserify](http://browserify.org/) the Angular Javascript code in `app.js` can use the `require` function and import the input validation rules from the server located in `./bundles/UserspaceBundle/service/forms`.
+  Thanks to [Browserify](http://browserify.org/) the Angular Javascript code in `app.js` can use the `require` function and import the input validation rules from the server located in `./bundles/UserspaceBundle/service/forms`. It means that the same code validate the inputs client and server side.
 
-If you want to modify the code in `app.js` you will have to [install browserify](http://browserify.org/#install) which provide this `require` function and every time you modify this code you will have to run the following command in a terminal :
+  If you want to modify the code in `app.js` you will have to [install browserify](http://browserify.org/#install) which provide this `require` function.
+  **!!Warning!!** Every time you modify this code you will have to run the following command in a terminal :
 
-```bash
-$ browserify client/js/app.js -o client/js/app-browserified.js
-```
-The web pages will indeed import the `app-browserified.js` file which will convert the require imports into something the browser can read.
+  ```bash
+  $ browserify client/js/app.js -o client/js/app-browserified.js
+  ```
+  The web pages will indeed import the `app-browserified.js` file which will convert the require imports into something the browser can read.
+
+* How to change the input validation rules
+  
+  You can change the input validation rules by editing their validation callbacks located in `./bundles/UserspaceBundle/service/forms/callbacks/ValidationCallbacks.js`. Those functions have to return an object with 2 properties :
+  * `hasError`: if the input has an error
+  * `errorMsg`: the error message to display to the user if `hasError` is `true`
+
+* How to change the general behavior of the UserspaceBundle
+
+  You have to modify the differents controllers located in `./bundles/UserspaceBundle/controller` and also its uses model `./bundles/UserspaceBundle/model/UserModel.js`. Feel free to contact me if you need any information.
 
 ## Security Issues
 
