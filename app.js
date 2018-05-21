@@ -39,7 +39,7 @@ app.set('views', [
   path.join(__dirname+'/bundles/MyOwnBundle', 'views')
 ]);
 
-//Adapt your server config
+//Adapt to your server config
 var http = require('http');
 var server = http.createServer(app);
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
