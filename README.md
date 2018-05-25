@@ -89,18 +89,17 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
   console.log("Server listening at", addr.address + ":" + addr.port);
 });
 ```
+Finally launch this app with :
+
+```bash
+$ node app.js
+```
 
 **TIP!** You can deploy for free this NodeJS app on [Zeit](https://zeit.co)
 
 **TIP!** You can have a free MongoDB database on [MLab](https://mlab.com/)
 
 **TIP!** You can use a Gmail email by [allowing less secure app](https://myaccount.google.com/lesssecureapps)
-
-Finally launch this app with :
-
-```bash
-$ node app.js
-```
 
 ## Bundle architecture
 
