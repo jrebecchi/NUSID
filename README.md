@@ -80,6 +80,16 @@ var userspaceMailOptions = {
 ```
 You can have more options for the email parameters looking at the [nodemailer options](https://nodemailer.com).
 
+* Server configuration
+
+Adapt the following code to your installation configuration:
+```js
+server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
+  var addr = server.address();
+  console.log("Server listening at", addr.address + ":" + addr.port);
+});
+```
+
 **TIP!** You can deploy for free this NodeJS app on [Zeit](https://zeit.co)
 
 **TIP!** You can have a free MongoDB database on [MLab](https://mlab.com/)
