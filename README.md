@@ -8,11 +8,12 @@ If you are an idle developer NUSID is made for you!
 
   [![Linux Build][travis-image]][travis-url]
   
+![NUSID Screenshot](https://nusidpublicresources-xeqnuojpin.now.sh/login_screenshot.png)
+
 ## Demo
 
 Click [here](https://nusid-mxmoriwkmz.now.sh/) to see a live demo!
 
-![NUSID Screenshot](https://nusidpublicresources-xeqnuojpin.now.sh/login_screenshot.png)
 ## Features
   * Registration
   * Login
