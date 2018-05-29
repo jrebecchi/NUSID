@@ -7,6 +7,10 @@ NUSID is a generic user space you can use in all your [Node.js](http://nodejs.or
 If you are an idle developer NUSID is made for you!
 
   [![Linux Build][travis-image]][travis-url]
+  
+## Demo
+
+Click [here](https://nusid-mxmoriwkmz.now.sh/) to see a live demo!
 
 ![NUSID Screenshot](https://nusidpublicresources-xeqnuojpin.now.sh/login_screenshot.png)
 ## Features
@@ -23,10 +27,6 @@ If you are an idle developer NUSID is made for you!
   * Flash message manager
   * Responsive design 
   * Designed in bundles similar to the [Symfony](https://symfony.com/) framework
-
-## Demo
-
-Click [here](https://nusid-mxmoriwkmz.now.sh/) to see a live demo!
 
 ## Installation
 
@@ -167,9 +167,9 @@ $ touch bundles/MyOwnBundle/views/pages/my-public-tab.ejs
   
   <div class="container">
   	<div id="content">
-  		<h1>This is a public page</h1>
+  		<h1>This is a private page</h1>
   		<hr>
-  		<p>You don't need to register to see this !</p>
+  		<p>You need to be registered to see this !</p>
   	</div>
   </div>
   		
