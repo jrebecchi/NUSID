@@ -5,8 +5,6 @@ NUSID - Node.JS User Space for Idle Developers!
 NUSID is a generic user space you can use in all your [Node.js](http://nodejs.org) apps as a starting point. It contains everything, from the [MongoDB](https://www.mongodb.com/) database model to the dynamic views made with [EJS](http://ejs.co/), [Bootstrap3](http://getbootstrap.com/docs/3.3/) and [AngularJS](https://angularjs.org/). 
 
 If you are an idle developer NUSID is made for you!
-
-  [![Linux Build][travis-image]][travis-url]
   
 ![NUSID Screenshot](https://nusidpublicresources-xeqnuojpin.now.sh/login_screenshot.png)
 
@@ -310,7 +308,7 @@ If you want to share some improvements, contact me and I will add you as a contr
 [downloads-image]: https://img.shields.io/npm/dm/express.svg
 [downloads-url]: https://npmjs.org/package/express
 [travis-image]: https://img.shields.io/travis/expressjs/express/master.svg?label=linux
-[travis-url]: https://travis-ci.org/expressjs/express
+[travis-url]: https://github.com/JohannC/NUSID
 [appveyor-image]: https://img.shields.io/appveyor/ci/dougwilson/express/master.svg?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/dougwilson/express
 [coveralls-image]: https://img.shields.io/coveralls/expressjs/express/master.svg
