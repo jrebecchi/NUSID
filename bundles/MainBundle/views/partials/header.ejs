@@ -14,7 +14,7 @@
 				<li><a href="/mypublictab">My public tab</a></li>
 				<li><a href="/myprivatetab">My private tab</a></li>
 				<% if (typeof user == 'undefined') { %>
-					<li data-toggle="modal" data-target="#login-modal"><a href="#">Connexion</a></li>
+					<li data-toggle="modal" data-target="#login-modal"><a href="#">Sign in</a></li>
 				<% } else { %>
 					<li class="dropdown">
 			        	<a href="/dashboard" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -26,7 +26,7 @@
 			            	<li><a href="/dashboard"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>Dashboard</a></li>
 			            	<li><a href="/settings"><span class="glyphicon glyphicon glyphicon-cog" aria-hidden="true"></span>Settings</a></li>
 			            	<li role="separator" class="divider"></li>
-			            	<li><a href="/logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>Logout</a></li>
+			            	<li><a href="/logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>Sign out</a></li>
 			          	</ul>
 	       			</li>
 				<% } %>
