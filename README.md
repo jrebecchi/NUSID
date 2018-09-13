@@ -41,7 +41,7 @@ $ cd NUSID
 $ npm install
 ```
 
-Then you need to edit the `app.js` file to enter your email and [MongoDB](https://www.mongodb.com/) information:
+Then you need to rename the `app.js.exemple` file as `app.js`, and edit it to enter your email and [MongoDB](https://www.mongodb.com/) information:
 
 * [MongoDB](https://www.mongodb.com/) configuration (where will be stored the users) 
 
