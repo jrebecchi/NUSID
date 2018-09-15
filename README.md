@@ -10,7 +10,7 @@ If you are an idle developer NUSID is made for you!
 
 ## Demo
 
-Click [here](https://nusid-opgxddvonx.now.sh/) to see a live demo!
+Click [here](https://nusid.net) to see a live demo!
 
 ## Features
   * Registration
