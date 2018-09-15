@@ -10,6 +10,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var csrf = require('csurf');
+var helmet = require('helmet');
 
 exports.getConfiguredApp = function(){
     app.use(express.static(path.resolve(__dirname, 'client')));
@@ -30,6 +31,6 @@ exports.getConfiguredApp = function(){
     app.use(passport.session());
     app.use(passport.session());
     app.use(csrf({ cookie: true }));
-    
+    app.use(helmet());
     return app;
 };
