@@ -26,6 +26,7 @@ Click [here](https://nusid.net) to see a live demo!
   * Flash message manager
   * Responsive design 
   * Designed in bundles similar to the [Symfony](https://symfony.com/) framework
+  * HTTP Strict Transport Security
 
 ## Installation
 
@@ -36,7 +37,7 @@ Installation is done using the
 [`git clone` command](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
 ```bash
-$ git clone https://github.com/JohannC/NUSID
+$ git clone https://github.com/JohannC/NUSID.git
 $ cd NUSID
 $ npm install
 ```
