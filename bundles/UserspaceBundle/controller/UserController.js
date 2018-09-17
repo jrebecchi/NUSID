@@ -14,12 +14,12 @@ var generateToken = function (cb) {
 var isRegistrationFormValid = function(req, res){
     var isFormValid = true;
     var iv = new InputValidator();
-    iv.testInput(registrationCB.testUsername, req.body.username); 
+    iv.testInput(registrationCB.testUsername, req.body.username.trim()); 
     if(iv.hasError){
         req.flash('error',iv.errorMsg);
         isFormValid = false;
     }
-    iv.testInput(registrationCB.testEmail,req.body.email);
+    iv.testInput(registrationCB.testEmail,req.body.email.trim());
     if(iv.hasError){
         req.flash('error',iv.errorMsg);
         isFormValid = false;
@@ -34,12 +34,12 @@ var isRegistrationFormValid = function(req, res){
         req.flash('error',iv.errorMsg);
         isFormValid = false;
     }         
-    iv.testInput(registrationCB.testName,req.body.first_name);
+    iv.testInput(registrationCB.testName,req.body.first_name.trim());
     if(iv.hasError){
         req.flash('error',iv.errorMsg);
         isFormValid = false;
     }           
-    iv.testInput(registrationCB.testName,req.body.last_name);
+    iv.testInput(registrationCB.testName,req.body.last_name.trim());
     if(iv.hasError){
         req.flash('error',iv.errorMsg);
         isFormValid = false;
@@ -190,11 +190,11 @@ exports.postCreateUser = function (req, res){
         return;
     }
     
-    var username = req.body.username;
-    var email = req.body.email;
+    var username = req.body.username.trim();
+    var email = req.body.email.trim();
     var password = req.body.password;
-    var lastName = req.body.last_name;
-    var firstName = req.body.first_name;
+    var lastName = req.body.last_name.trim();
+    var firstName = req.body.first_name.trim();
     var extras = {
         lastName: lastName , 
         firstName: firstName,
