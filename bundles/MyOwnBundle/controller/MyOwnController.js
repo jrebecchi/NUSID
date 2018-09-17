@@ -5,5 +5,5 @@ exports.getMyPrivateTab = function (req, res){
 };
 
 exports.getMyPublicTab = function (req, res){
-    res.render('pages/my-public-tab.ejs', {csrfToken: req.csrfToken() });
+    res.render('pages/my-public-tab.ejs', { user: req.user, csrfToken: req.csrfToken() });
 };
