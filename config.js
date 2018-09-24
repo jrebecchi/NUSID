@@ -1,7 +1,6 @@
 var exports;
 
 var express = require('express');
-var app = express();
 var bodyParser = require('body-parser');
 var flashify = require('flashify');
 var morgan = require('morgan');
@@ -12,7 +11,7 @@ var session = require('express-session');
 var csrf = require('csurf');
 var helmet = require('helmet');
 
-exports.getConfiguredApp = function(){
+exports.config = function(app){
     app.use(express.static(path.resolve(__dirname, 'client')));
     app.use(cookieParser('userspaceSecret'));
     app.use(session({ 
@@ -29,8 +28,6 @@ exports.getConfiguredApp = function(){
     app.use(morgan('combined'));
     app.use(passport.initialize());
     app.use(passport.session());
-    app.use(passport.session());
     app.use(csrf({ cookie: true }));
     app.use(helmet());
-    return app;
 };
