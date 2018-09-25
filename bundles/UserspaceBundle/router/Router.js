@@ -26,7 +26,7 @@ exports.init = function(app) {
     app.post('/login',
         passport.authenticate('local', {
             failureRedirect: '/login',
-            failureFlash: 'Invalid username or password.', 
+            failureFlash: 'Invalid email or password.', 
         }),
         function(req, res) {
             UserspaceController.postLogin(req, res);
