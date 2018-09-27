@@ -29,8 +29,7 @@
   },
   "scripts": {
     "test": "jest",
-    "start": "node app.js",
-    "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
