@@ -11,7 +11,7 @@ var session = require('express-session');
 var csrf = require('csurf');
 var helmet = require('helmet');
 
-exports.config = function(app){
+exports.init = function(app){
     app.use(express.static(path.resolve(__dirname, 'client')));
     app.use(cookieParser('userspaceSecret'));
     app.use(session({ 
@@ -28,6 +28,10 @@ exports.config = function(app){
     app.use(morgan('combined'));
     app.use(passport.initialize());
     app.use(passport.session());
-    app.use(csrf({ cookie: true }));
+    app.use(
+        process.env.NODE_ENV === 'test' ?
+        csrf({ ignoreMethods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'] }):
+        csrf({ cookie: true })
+    );
     app.use(helmet());
 };
