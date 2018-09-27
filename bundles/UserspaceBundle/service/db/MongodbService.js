@@ -10,11 +10,12 @@ module.exports = function(options) {
 
   this.connect = function connect(cb) {
     cb = cb || nop;
+    var connectionOptions = { useNewUrlParser: true };
     var connectionString = 'mongodb://' +
       (options.hostname || 'localhost') + ':' +
       (options.port || '27017') + '/' +
       (options.database || 'user_management');
-    MongoClient.connect(connectionString, function(err, mongoclient) {
+    MongoClient.connect(connectionString, connectionOptions,function(err, mongoclient) {
       if (err) {
         cb(err);
         return;
