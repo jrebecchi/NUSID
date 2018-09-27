@@ -1,7 +1,7 @@
 //App entry point
 var express = require('express');
 var app = express();
-require('./config').config(app);
+require('./config').init(app);
 var path = require('path');
 
 //Declare here your bundles
