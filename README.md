@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/JohannC/NUSID.svg?branch=master)](https://travis-ci.org/JohannC/NUSID)
+[![Coverage Status](https://coveralls.io/repos/github/JohannC/NUSID/badge.svg?branch=master)](https://coveralls.io/github/JohannC/NUSID?branch=master)
+
+
 [![NUSID Logo](https://nusidpublicresources-xeqnuojpin.now.sh/Nusid_Banner_Logo_800px.jpg)](#)
 
 NUSID - Node.JS User Space for Idle Developers!
