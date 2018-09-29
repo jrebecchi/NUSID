@@ -256,7 +256,7 @@ exports.postCreateUser = function (req, res){
                                 else {
                                     req.flash('info', "You will receive a confirmation link at your email address in a few minutes.");
                                 }
-                                res.redirect('/dashboard');  
+                                res.redirect('/login');  
                             });
                         });
                     }
