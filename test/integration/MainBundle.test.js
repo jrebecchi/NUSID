@@ -2,7 +2,7 @@ const AppTester = require('../utils/app-tester.js')
 
 describe('Test MainBundle API', () => {
     
-    let appTester = new AppTester();
+    let appTester = new AppTester({useMockAuthentificaiton: true});
     let request = appTester.getRequestSender();
 
     test('Index reached', (done) => {

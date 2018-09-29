@@ -28,7 +28,7 @@
     "supertest-session": "^3.3.0"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --forceExit",
     "start": "node app.js"
   },
   "repository": {

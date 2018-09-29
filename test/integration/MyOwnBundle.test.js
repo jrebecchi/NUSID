@@ -2,7 +2,7 @@ const AppTester = require('../utils/app-tester.js')
 
 describe('Test MyOwnBundle API', () => {
     
-    let appTester = new AppTester();
+    let appTester = new AppTester({useMockAuthentificaiton: true});
     let request = appTester.getRequestSender();
 
     test('Public tab reached', (done) => {
