@@ -1,4 +1,4 @@
-const AppTester = require('../utils/app-tester.js')
+const AppTester = require('../../utils/app-tester.js')
 
 describe('Test MainBundle API', () => {
     

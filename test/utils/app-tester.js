@@ -60,6 +60,15 @@ const AppTester = function (options){
         this.request = sessionize(this.app);
     };
 
+    this.getQueryArguments = (query) => {
+        const queryArguments = new Object();
+        query.split("?")[1].split("&").forEach((element, index) => {
+            let tmp = element.split("=");
+            queryArguments[tmp[0]] = tmp[1];
+        });
+        return queryArguments;
+    }
+
     if (options.useMockAuthentificaiton){
         this.loginMockUser = (mockUser) => {
             passport.use(new Strategy(
