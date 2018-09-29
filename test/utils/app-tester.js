@@ -10,6 +10,8 @@ const path =require('path');
 var userspaceBundle = require('../../bundles/UserspaceBundle/UserspaceBundle');
 var mainBundle = require('../../bundles/MainBundle/MainBundle');
 var myOwnBundle = require('../../bundles/MyOwnBundle/MyOwnBundle');
+const DB = require('../../bundles/UserspaceBundle/service/db/MongodbService.js');
+
 
 global.userspaceMailOptions = {
     host: 'smtp.ethereal.email',
@@ -68,6 +70,29 @@ const AppTester = function (options){
         });
         return queryArguments;
     }
+
+    this.removeUser = (email, done) => {
+        var db = new DB({});
+        var COLLECTION = 'users';
+        db.connect((err) => {
+            if (err) {
+                done(err);
+            }
+            db.loadCollection(COLLECTION, (err) => {
+                if (err) {
+                    done(err);
+                }
+                db.delete(COLLECTION, {
+                    email: email
+                }, function(err) {
+                    if (err) {
+                        done(err);
+                    }
+                    done();
+                });
+            });
+        });  
+    };
 
     if (options.useMockAuthentificaiton){
         this.loginMockUser = (mockUser) => {

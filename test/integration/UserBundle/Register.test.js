@@ -1,8 +1,16 @@
 const AppTester = require('../../utils/app-tester.js');
-const DB = require('../../../bundles/UserspaceBundle/service/db/MongodbService.js');
 
 let appTester;
 let request;
+let testUser = {
+    username: "username", 
+    email: "test@test.com", 
+    password: "password", 
+    confirm_password: "password",
+    first_name: "firstname",
+    last_name: "lastname",
+    conditions: true
+};
 
 beforeAll(() => {
     
@@ -94,15 +102,7 @@ describe('Prevent user registration when wrong inputs', () => {
 
 describe('User Registration', () => {
     test('Register user with correct entries and prevent other registration with same emmail or username', (done) => {
-        request.post('/register').send({
-            username: "username", 
-            email: "test@test.com", 
-            password: "password", 
-            confirm_password: "password",
-            first_name: "firstname",
-            last_name: "lastname",
-            conditions: true
-        })
+        request.post('/register').send(testUser)
         .then((response) => {
             expect(response.header.location).toBe("/login");
             expect(response.statusCode).toBe(302);
@@ -150,25 +150,5 @@ describe('User Registration', () => {
 });
 
 afterAll((done) =>{
-    var db = new DB({});
-    var COLLECTION = 'users';
-    db.connect((err) => {
-        if (err) {
-            done(err);
-        }
-        db.loadCollection(COLLECTION, (err) => {
-            if (err) {
-                done(err);
-            }
-            db.dropCollection(COLLECTION, (err) => {
-                if (err) {
-                    done(err);
-                }
-                db.disconnect(() => {
-                    done();
-                });
-            });
-        });
-    });  
+    appTester.removeUser(testUser.email, done);
 });
-
