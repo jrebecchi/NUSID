@@ -27,11 +27,10 @@ beforeAll(() => {
 });
 
 
-describe('Test account modification with good credentials', () => {
-    test('Modify : username - email - password - firstname - lastname  ', (done) => {
+describe('Test Modifying password', () => {
+    test('with good user inputs', (done) => {
         request.post('/register').send(testUser)
         .then((response) => {
-            console.log(response.text);
             expect(response.header.location).toBe("/login");
             expect(response.statusCode).toBe(302);
             return request.post('/login').send({username: testUser.email, password: testUser.password})

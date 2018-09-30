@@ -29,7 +29,6 @@ describe('Test login with good credentials', () => {
     test('Register - login -logout ', (done) => {
         request.post('/register').send(testUser)
         .then((response) => {
-            console.log(response.text);
             expect(response.header.location).toBe("/login");
             expect(response.statusCode).toBe(302);
             return request.post('/login').send({username: testUser.email, password: testUser.password})
@@ -58,7 +57,6 @@ describe('Test login with bad credentials', () => {
     test('Register - login with wring email - login with wrong password ', (done) => {
         request.post('/register').send(testUser)
         .then((response) => {
-            console.log(response.text);
             expect(response.header.location).toBe("/login");
             expect(response.statusCode).toBe(302);
             return request.post('/login').send({username: 'badadress@test.com', password: testUser.password});
