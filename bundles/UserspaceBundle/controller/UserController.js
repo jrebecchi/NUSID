@@ -481,7 +481,6 @@ exports.postModifyFirstName = function(req, res){
                     }
                     users.close();
                     req.flash('success', "Your first name is now updated !");
-                    console.log(req.user);
                     res.redirect('/settings');
                     return;
                 });
