@@ -29,8 +29,6 @@ beforeAll(() => {
 
 
 describe('Test account modification with bad credentials', () => {
-    let appTester = new AppTester({useMockAuthentificaiton: false});
-    let request = appTester.getRequestSender();
     test('Modify : username - email - password - firstname - lastname  ', (done) => {
         request.post('/register').send(testUser)
         .then((response) => {
