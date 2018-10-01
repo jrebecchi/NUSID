@@ -13,7 +13,7 @@ let testUser = {
     conditions: true
 };
 
-let testUserDesired = {
+let testUserDesired1 = {
     username: "bobbysmith", 
     email: "bobby@smith.com", 
     password: "password2", 
@@ -21,20 +21,19 @@ let testUserDesired = {
     last_name: "smoothy",
 };
 
-beforeAll(() => {
-
+beforeAll(() => { 
     appTester = new AppTester({useMockAuthentificaiton: false});
     request = appTester.getRequestSender();
-    
+
     test('Email test options pass to global object', (done) => {
         expect(global.userspaceMailOptions).toBeTruthy();
         done();
     });
 });
 
-
-describe('Test account modification with good credentials', () => {
+describe('Test account modification with bad credentials', () => {  
     test('Modify : username - email - password - firstname - lastname  ', (done) => {
+        testUser.email = testUserDesired1.email;
         request.post('/register').send(testUser)
         .then((response) => {
             expect(response.header.location).toBe("/login");
@@ -48,19 +47,19 @@ describe('Test account modification with good credentials', () => {
         })
         .then((response) => {
             expect(response.statusCode).toBe(200);
-            return request.post('/modify-username').send({username: testUserDesired.username});
+            return request.post('/modify-username').send({username: testUserDesired1.username});
         })
         .then((response) => {
             expect(response.statusCode).toBe(302);
-            return request.post('/modify-email').send({email: testUserDesired.email});
+            return request.post('/modify-email').send({email: testUserDesired1.email});
         })
         .then((response) => {
             expect(response.statusCode).toBe(302);
-            return request.post('/modify-firstname').send({first_name: testUserDesired.first_name});
+            return request.post('/modify-firstname').send({first_name: testUserDesired1.first_name});
         })
         .then((response) => {
             expect(response.statusCode).toBe(302);
-            return request.post('/modify-lastname').send({last_name: testUserDesired.last_name});
+            return request.post('/modify-lastname').send({last_name: testUserDesired1.last_name});
         })
         .then((response) => {
             expect(response.statusCode).toBe(302);
@@ -68,15 +67,16 @@ describe('Test account modification with good credentials', () => {
         })
         .then((response) => {
             expect(response.statusCode).toBe(200);
-            expect(response.text.includes(testUserDesired.username)).toBeTruthy();
-            expect(response.text.includes(testUserDesired.email)).toBeTruthy();
-            expect(response.text.includes(testUserDesired.first_name)).toBeTruthy();
-            expect(response.text.includes(testUserDesired.last_name)).toBeTruthy();
+            expect(response.text.includes(testUserDesired1.username)).toBeTruthy();
+            expect(response.text.includes(testUserDesired1.email)).toBeTruthy();
+            expect(response.text.includes(testUserDesired1.first_name)).toBeTruthy();
+            expect(response.text.includes(testUserDesired1.last_name)).toBeTruthy();
+            userToDelete = testUser.email;
             done();
         });
     }, 100000);
 });
 
 afterAll((done) =>{
-    appTester.removeUser(testUserDesired.email ,done);
+    appTester.removeUser(testUser.email, done);
 });

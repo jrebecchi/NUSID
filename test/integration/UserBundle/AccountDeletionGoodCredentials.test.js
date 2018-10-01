@@ -13,8 +13,6 @@ let testUser = {
     conditions: true
 };
 
-let passwordDesired = "newpassword";
-
 beforeAll(() => {
 
     appTester = new AppTester({useMockAuthentificaiton: false});
@@ -28,10 +26,9 @@ beforeAll(() => {
 
 
 describe('Test account account deletion', () => {
-    test('with good user input', (done) => {
+    test('with good password', (done) => {
         request.post('/register').send(testUser)
         .then((response) => {
-            console.log(response.text);
             expect(response.header.location).toBe("/login");
             expect(response.statusCode).toBe(302);
             return request.post('/login').send({username: testUser.email, password: testUser.password})
