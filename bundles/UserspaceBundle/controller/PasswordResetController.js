@@ -189,10 +189,14 @@ exports.postResetPassword = function (req, res){
                     passwordUpdateRequestDate : new Date()
                 };
                 users.addExtras({email : email}, updatePasswordProperties, function(err, extras){
-                    console.log(err);
-                    users.close();
+                    if(err){
+                        users.close();
+                        req.flash('error', "A mistake happened in our side, please retry !");
+                        res.redirect('/');
+                        return;
+                    }
+                    sendPasswordRecoveryEmail(req, res, email, updatePasswordProperties.updatePasswordToken);
                 });
-                sendPasswordRecoveryEmail(req, res, email, updatePasswordProperties.updatePasswordToken);
             } else {
                 //We never say to a user if an email is or is not in our database for security reasons
                 users.close();
