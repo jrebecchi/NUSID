@@ -51,12 +51,12 @@ module.exports.init = function(){
         users.load(function(err) {
             if (err) {
                 users.close();
-                return cb(err);
+                return cb(err, null);
             }
             users.getTokenForUsername(user.username, function(err, token) {
-                if (err) {
+                if (err || !token) {
                     users.close();
-                    return cb(err);
+                    return cb("No user found", null);
                 } else {
                     users.close();
                     return cb(null, token);
@@ -70,12 +70,12 @@ module.exports.init = function(){
         users.load(function(err) {
             if (err) {
                 users.close();
-                return cb(err);
+                return cb(err, null);
             }
             users.getUserForToken(token, function(err, user) {
-                if (err) {
+                if (err || !user) {
                     users.close();
-                    return cb(err);
+                    return cb("No user found", null);
                 } else {
                     users.close();
                     return cb(null, user);

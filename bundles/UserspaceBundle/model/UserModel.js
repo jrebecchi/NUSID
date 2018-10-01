@@ -454,8 +454,8 @@ module.exports = function() {
             throw new Error('Cannot call "getUser" on unloaded user management object');
         }
         db.find(COLLECTION, filter, function(err, item) {
-            if (err) {
-                cb(err);
+            if (err || !item) {
+                cb("No user found");
                 return;
             }
             var user = new Object();
@@ -502,7 +502,6 @@ module.exports = function() {
         }
         db.find(COLLECTION, filter, function(err, item) {
             if (err) {
-                console.log(err)
                 cb(err);
                 return;
             }
