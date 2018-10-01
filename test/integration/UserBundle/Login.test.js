@@ -54,7 +54,7 @@ describe('Test login with bad credentials', () => {
     testUser.email = 'alice.smith@test.com';
     testUser.username = 'alicesmith';
 
-    test('Register - login with wring email - login with wrong password ', (done) => {
+    test('Register - login with wrong email - login with wrong password ', (done) => {
         request.post('/register').send(testUser)
         .then((response) => {
             expect(response.header.location).toBe("/login");
