@@ -94,6 +94,32 @@ const AppTester = function (options){
         });  
     };
 
+    this.getUser = (email) => {
+        return new Promise((resolve, reject) => {
+            const db = new DB({});
+            const COLLECTION = 'users';
+            db.connect((err) => {
+                if (err) {
+                    reject(err);
+                }
+                db.loadCollection(COLLECTION, (err) => {
+                    if (err) {
+                       reject(err); 
+                    }
+                    db.find(COLLECTION, {
+                        email: email
+                    }, function(err, user) {
+                        if (err || !user) {
+                            reject(Error("No user"));
+                        }
+                        resolve(user);
+                    }); 
+                });
+            });
+        });
+       
+    };
+
     if (options.useMockAuthentificaiton){
         this.loginMockUser = (mockUser) => {
             passport.use(new Strategy(
