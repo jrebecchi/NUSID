@@ -16,6 +16,7 @@
     "flashify": "^0.1.2",
     "helmet": "^3.13.0",
     "mongodb": "^3.0.8",
+    "mongoose": "^5.3.2",
     "morgan": "^1.6.1",
     "nodemailer": "^4.6.4",
     "passport": "^0.2.2",

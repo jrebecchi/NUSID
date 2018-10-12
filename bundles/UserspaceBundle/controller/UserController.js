@@ -1,19 +1,23 @@
-var InputValidator = require("../service/forms/InputValidatorService");
-var registrationCB = require("../service/forms/callbacks/ValidationCallbacks");
-var UserModel = require("../model/UserModel");
-var UserspaceMailer = require('../service/mailer/UserspaceMailer');
-var crypto = require('crypto');
-var CONFIRM_EMAIL_TOKEN_LENGTH = 64;
-var exports;
+const InputValidator = require("../service/forms/InputValidatorService");
+const registrationCB = require("../service/forms/callbacks/ValidationCallbacks");
+const UserspaceMailer = require('../service/mailer/UserspaceMailer');
+const crypto = require('crypto');
+const CONFIRM_EMAIL_TOKEN_LENGTH = 64;
+const User = require('../model/UserModel');
 
+class EmailNotSentError extends Error {};
+class EmailAlreadyExistsError extends Error {};
+class UsernameAlreadyExistsError extends Error {};
+class WrongPasswordError extends Error {};
+class UserNotFound extends Error {};
 
-var generateToken = function (cb) {
+const generateToken = function (cb) {
     return crypto.randomBytes(CONFIRM_EMAIL_TOKEN_LENGTH, cb).toString("hex");
 };
 
-var isRegistrationFormValid = function(req, res){
-    var isFormValid = true;
-    var iv = new InputValidator();
+const isRegistrationFormValid = function(req, res){
+    let isFormValid = true;
+    let iv = new InputValidator();
     iv.testInput(registrationCB.testUsername, req.body.username.trim()); 
     if(iv.hasError){
         req.flash('error',iv.errorMsg);
@@ -53,218 +57,133 @@ var isRegistrationFormValid = function(req, res){
 };
 
 exports.getCheckEmailExists = function (req, res){
-    var email = req.query.email;
-    if (req.user !== undefined && req.user.email === email){
-        res.json({
-            "emailExists": false,
-            "errorMsg": ""
-        });
-        return;
-    }
-    var users = new UserModel();
-    users.load(function(err) {
-        if(err){
-            users.close();
-            req.flash('error', "A mistake happened in our side, please retry !");
-            return;
+    let email = req.query.email;
+    User.userExists({email: email})
+    .then(emailExists => {
+        if(emailExists){
+            res.json({
+                "emailExists": true,
+                "errorMsg": "This email address is already used. You can sign in with this one or type another !"
+            });
+        } else {
+            res.json({
+                "emailExists": false,
+                "errorMsg": ""
+            });
         }
-        users.emailExists(email, function(err, exists) {
-            if(err){
-                users.close();
-                req.flash('error', "A mistake happened in our side, please retry !");
-                return;
-            }
-            if (exists) {
-                users.close();
-                res.json({
-                    "emailExists": true,
-                    "errorMsg": "This email address is already used. You can sign in with this one or type another !"
-                });
-            } else {
-                users.close();
-                res.json({
-                    "emailExists": false,
-                    "errorMsg": ""
-                });
-            }
-        });
+    })
+    .catch(e => {
+        console.log(e);
     });
 };
 
 exports.getCheckUsernameExists = function (req, res){
-    var username = req.query.username;
-    if (req.user !== undefined && req.user.username === username){
-        res.json({
-            "usernameExists": false,
-            "errorMsg": ""
-        });
-        return;
-    }
-    var users = new UserModel();
-    users.load(function(err) {
-        if(err){
-            users.close();
-            req.flash('error', "A mistake happened in our side, please retry !");
-            return;
+    let username = req.query.username;
+    User.userExists({username: username})
+    .then(usernameExists => {
+        if(usernameExists){
+            res.json({
+                "usernameExists": true,
+                "errorMsg": "This username is already used. Please type another !"
+            });
+        } else {
+            res.json({
+                "usernameExists": false,
+                "errorMsg": ""
+            });
         }
-        users.userExists(username, function(err, exists) {
-            if(err){
-                users.close();
-                req.flash('error', "A mistake happened in our side, please retry !");
-                return;
-            }
-            if (exists) {
-                users.close();
-                res.json({
-                    "usernameExists": true,
-                    "errorMsg": "This username is already used. Please type another !"
-                });
-            } else {
-                users.close();
-                res.json({
-                    "usernameExists": false,
-                    "errorMsg": ""
-                });
-            }
-        });
+    })
+    .catch(e => {
+        console.log(e);
     });
 };
 
 exports.getConfirmEmail = function(req, res){
-    var token = req.query.token;
-    var users = new UserModel();
-    users.load(function(err) {
-        if(err){
-            req.flash('error', "A mistake has occured.");
-            res.redirect('/login');
-            users.close();
-            return;
+    let token = req.query.token;
+    User.userExists({'extras.emailConfirmationCode': token})
+    .then((exists) =>{
+        if (!exists)
+            throw new UserNotFound();
+        return User.getUser({'extras.emailConfirmationCode': token})
+    })
+    .then(user => {
+        return User.update({email: user.email}, {'extras.emailConfirmationCode': null, 'extras.emailConfirmed': true,});
+    })
+    .then(() => {
+        req.flash('success', "Your email adress is now confirmed !");
+        res.redirect('/settings');
+    })
+    .catch(e => {
+        if(e instanceof UserNotFound)
+            req.flash('error', 'This link is no longer valid.');
+        else{
+            console.log(e);
+            req.flash('error', "A mistake happened at our side, please retry.");
         }
-        users.userFromEmailConfirmationCodeExists(token, function(err, exists) {
-            if(err){
-                req.flash('error', "A mistake has occured.");
-                res.redirect('/login');
-                users.close();
-                return;
-            }
-            if (exists) {
-                users.getUserForEmailConfirmationCode(token, function(err, user){
-                    if(err){
-                        req.flash('error', "A mistake has occured.");
-                        res.redirect('/login');
-                        users.close();
-                        return;
-                    } else {
-                        var updateEmailProperties = {
-                            emailConfirmed : true,
-                            emailConfirmationCode : null
-                        };
-                        users.addExtras({email : user.email}, updateEmailProperties, function(err){
-                            if(err){
-                                req.flash('error', "A mistake has occured.");
-                                res.redirect('/');
-                                users.close();
-                                return;
-                            }
-                            req.flash('success', "Your email adress is now confirmed !");
-                            res.redirect('/');
-                            users.close();
-                            return;
-                        });
-                    } 
-                });
-            } else {
-                req.flash('error', "Wrong email confirmation code, you can ask a new one in your profile settings");
-                res.redirect('/');
-                users.close();
-                return;
-            }
-        });
+        res.redirect('/settings');
     });
 };
 
 exports.postCreateUser = function (req, res){
-    if(req.user !== undefined){
+    if (req.user !== undefined){
         req.flash('error', "To register a new account you need to deconnect yourself !");
         res.redirect('/dashboard');
         return;
     }
-    
-    var username = req.body.username.trim();
-    var email = req.body.email.trim();
-    var password = req.body.password;
-    var lastName = req.body.last_name.trim();
-    var firstName = req.body.first_name.trim();
-    var extras = {
-        lastName: lastName , 
-        firstName: firstName,
-        emailConfirmed : false,
-        emailConfirmationCode : generateToken()
+    const user = { 
+        username: req.body.username.trim(),
+        email: req.body.email.trim(),
+        password: req.body.password,
+        extras: {
+            lastName: req.body.last_name.trim(),
+            firstName: req.body.first_name.trim(),
+            emailConfirmationCode: generateToken()
+        }
     };
-
-    if(!isRegistrationFormValid(req, res)){
-        res.redirect('/register?username='+username+'&email='+email+'&lastName='+lastName+'&firstName='+firstName);
+    if (!isRegistrationFormValid(req, res)){
+        res.redirect('/register?username='+user.username+'&email='+user.email+'&lastName='+user.extras.lastName+'&firstName='+user.extras.firstName);
         return;
     }
-    var users = new UserModel();
-    users.load(function(err) {
-        if(err){
-            users.close();
-            req.flash('error', "A mistake happened in our side, please retry !");
-            res.redirect('/register');
-            return;
+    User.userExists({username: user.username})
+    .then(usernameExists => {
+        if (usernameExists){
+            throw new UsernameAlreadyExistsError();
+        } else {
+            return User.userExists({email: user.email});
         }
-        users.userExists(username, function(err, exists) {
-            if(err){
-                users.close();
-                req.flash('error', "A mistake happened in our side, please retry !");
-                res.redirect('/register');
-                return;
+    })
+    .then(emailExists => {
+        if (emailExists){
+            throw new EmailAlreadyExistsError();
+        } else {
+            return User.createUser(user);
+        }
+    })
+    .then(() => {
+        req.flash('success', 'User created !');
+        sendConfirmationEmail(req, res, user.extras.emailConfirmationCode, user.email, function(err){
+            if (err) {
+                throw new EmailNotSentError();  
             }
-            if (exists) {
-                users.close();
-                req.flash('error', 'User already exists');
-                res.redirect('/register?username='+username+'&email='+email+'&lastName='+lastName+'&firstName='+firstName);
-
-            } else {
-                users.emailExists(email, function(err, exists) {
-                    if(err){
-                        users.close();
-                        req.flash('error', "A mistake happened in our side, please retry !");
-                        res.redirect('/register');
-                        return;
-                    }
-                    if (exists) {
-                        users.close();
-                        req.flash('error', 'Email already exists');
-                        res.redirect('/register?username='+username+'&email='+email+'&lastName='+lastName+'&firstName='+firstName);
-
-                    } else {
-                        users.createUser(username, email, password, extras, function (err) {
-                            if(err){
-                                users.close();
-                                req.flash('error', "A mistake happened in our side, please retry !");
-                                res.redirect('/register');
-                                return;
-                            }
-                            users.close();
-                            req.flash('success', 'User created !');
-                            sendConfirmationEmail(req, res, extras.emailConfirmationCode, email, function(err){
-                                if (err) {
-                                    req.flash('error', "Mail not sent, an error has occured.");
-                                }
-                                else {
-                                    req.flash('info', "You will receive a confirmation link at your email address in a few minutes.");
-                                }
-                                res.redirect('/login');  
-                            });
-                        });
-                    }
-                });
-            }   
+            else {
+                req.flash('info', "You will receive a confirmation link at your email address in a few minutes.");
+            }
+            res.redirect('/login');
         });
-        
-    });
+    })
+    .catch(e => {
+        if(e instanceof UsernameAlreadyExistsError)
+            req.flash('error', 'Username already exists');
+        else if(e instanceof EmailAlreadyExistsError)
+            req.flash('error', 'Email already exists');
+        else if(e instanceof EmailNotSentError)
+            req.flash('error', "Mail not sent, an error has occured.");
+        else {
+            console.log(e);
+            req.flash('error', "A mistake happened at our side, please retry !");
+        }
+        res.redirect('/register?username='+user.username+'&email='+user.email+'&lastName='+user.extras.lastName+'&firstName='+user.extras.firstName);
+    })
 };
 
 exports.getSendConfirmationEmail = function(req, res){
@@ -279,57 +198,54 @@ exports.getSendConfirmationEmail = function(req, res){
 };
 
 exports.postModifyPassword = function(req, res){
-    var iv = new InputValidator();
-    var oldPassword = req.body.old_password;
-    var newPassword = req.body.password;
-    var confirmNewPassword = req.body.confirm_password;
+    let iv = new InputValidator();
+    let oldPassword = req.body.old_password;
+    let newPassword = req.body.password;
+    let confirmNewPassword = req.body.confirm_password;
     iv.testInput(registrationCB.testPassword, newPassword, confirmNewPassword); 
-    if(iv.hasError){
+    if (iv.hasError){
         req.flash('error',iv.errorMsg);
         res.redirect("/settings");
         return;
     }
     iv.testInput(registrationCB.testConfirmPassword, confirmNewPassword, newPassword); 
-    if(iv.hasError){
+    if (iv.hasError){
         req.flash('error',iv.errorMsg);
         res.redirect("/settings");
         return;
     }
-    var users = new UserModel();
-    users.load(function(err) {
-        if(err){
-            users.close();
-            req.flash('error', "A mistake happened, you can retry to change your username");
-            res.redirect('/settings');
-            return;
+    User.userExists({email: req.user.email})
+    .then((exists) =>{
+        if (!exists)
+            throw new UserNotFound();
+        return User.isPasswordValid({email: req.user.email}, oldPassword)
+    })
+    .then(isValid => {
+        if (!isValid){
+            throw new WrongPasswordError();
         }
-        users.getTokenForEmail(req.user.email, function(err, token){
-            if(err){
-                users.close();
-                req.flash('error', err);
-                res.redirect('/settings');
-                return;
-            }
-            users.changePassword(token, oldPassword, newPassword, function(err){
-                if(err){
-                    users.close();
-                    req.flash('error', err);
-                    res.redirect('/settings');
-                    return;
-                }
-                users.close();
-                req.flash('success', "Your password is now updated !");
-                res.redirect('/settings');
-                return;
-            });
-        });
-            
+        return User.resetPassword({email: req.user.email}, newPassword);
+    })
+    .then(() => {
+        req.flash('success', "Your password is now updated !");
+        res.redirect('/settings');
+    })
+    .catch(e => {
+        if(e instanceof UserNotFound)
+            req.flash('error', 'User not found');
+        if(e instanceof WrongPasswordError)
+            req.flash('error', 'You entered a wrong password !');
+        else {
+            console.log(e);
+            req.flash('error', "A mistake happened at our side, please retry !");
+        }
+        res.redirect('/settings');
     });
 };
 
 exports.postModifyUsername = function(req, res){
-   var iv = new InputValidator();
-    var username = req.body.username;
+    let iv = new InputValidator();
+    let username = req.body.username.trim();
     iv.testInput(registrationCB.testUsername, username); 
     if(iv.hasError){
         req.flash('error',iv.errorMsg);
@@ -337,51 +253,42 @@ exports.postModifyUsername = function(req, res){
         return;
     }
     if(username === req.user.username){
-        req.flash('info',"This is the same username as the previous one!");
+        req.flash('info',"This is the same username as the previous one.");
         res.redirect("/settings");
         return;
     }
-    var users = new UserModel();
-    users.load(function(err) {
-        if(err){
-            users.close();
-            req.flash('error', "A mistake happened, you can retry to change your username");
-            res.redirect('/settings');
-            return;
+    User.userExists({email: req.user.email})
+    .then((exists) =>{
+        if (!exists)
+            throw new UserNotFound();
+        return User.userExists({username: username});
+    })
+    .then(usernameExists => {
+        if(usernameExists)
+            throw new UsernameAlreadyExistsError();
+        return User.update({email: req.user.email}, {username: username});
+    })
+    .then(() => {
+        req.flash('success', "Your username is now updated.");
+        res.redirect('/settings');
+    })
+    .catch(e => {
+        if(e instanceof UserNotFound)
+            req.flash('error', 'User not found');
+        else if(e instanceof UsernameAlreadyExistsError)
+            req.flash('error', 'Username already exists');
+        else {
+            console.log(e);
+            req.flash('error', "A mistake happened at our side, please retry.");
         }
-        users.userExists(username, function(err, exists) {
-            if (err){
-                users.close();
-                req.flash('error', "A mistake happened, you can retry to change your username");
-                res.redirect('/settings');
-                return;
-            }
-            if (exists) {
-                users.close();
-                req.flash('error', 'This username already exists, please choose another !');
-                res.redirect('/settings');
-                return;
-            } else {
-                users.changeUsername(req.user.username, username, function(err) {
-                    if(err){
-                        users.close();
-                        req.flash('error', "A mistake happened, you can retry to change your username");
-                        res.redirect('/settings');
-                        return;
-                    }
-                    users.close();
-                    req.flash('success', "Your username is now updated !");
-                    res.redirect('/settings');
-                    return;
-                });
-            }
-         });
-    }); 
+        res.redirect('/settings');
+    });
 };
 
 exports.postModifyEmail = function(req, res){
-    var iv = new InputValidator();
-    var email = req.body.email;
+    let iv = new InputValidator();
+    let email = req.body.email.trim();
+    let emailConfirmationCode;
     iv.testInput(registrationCB.testEmail, email); 
     if(iv.hasError){
         req.flash('error',iv.errorMsg);
@@ -393,58 +300,48 @@ exports.postModifyEmail = function(req, res){
         res.redirect("/settings");
         return;
     }
-    var users = new UserModel();
-    users.load(function(err) {
-        if(err){
-            users.close();
-            req.flash('error', "A mistake happened, you can retry to change your email");
+    User.userExists({email: req.user.email})
+    .then((exists) =>{
+        if (!exists)
+            throw new UserNotFound();
+        return User.userExists({email: email});
+    })
+    .then(emailExists => {
+        if(emailExists)
+            throw new EmailAlreadyExistsError();
+        emailConfirmationCode = generateToken();
+        return User.update({username: req.user.username}, {email: email, 'extras.emailConfirmationCode': emailConfirmationCode, "extras.emailConfirmed": false});
+    })
+    .then(() => {
+        req.flash('success', "Your email is now updated !");
+        sendConfirmationEmail(req, res, emailConfirmationCode, email, function(err){
+            if (err) {
+                throw new EmailNotSentError();  
+            }
+            else {
+                req.flash('info', "You will receive a confirmation link at your email address in a few minutes.");
+            }
             res.redirect('/settings');
-            return;
-        }
-        users.emailExists(email, function(err, exists) {
-            if(err){
-                users.close();
-                req.flash('error', "A mistake happened, you can retry to change your email");
-                res.redirect('/settings');
-                return;
-            }
-            if (exists) {
-                users.close();
-                req.flash('error', 'This email already exists, please choose another !');
-                res.redirect('/settings');
-                return;
-            } else {
-                var emailConfirmationCode = generateToken();
-                users.changeEmail(req.user.email, email, emailConfirmationCode, function(err) {
-                    if(err){
-                        users.close();
-                        req.flash('error', "A mistake happened, you can retry to change your email");
-                        res.redirect('/settings');
-                        return;
-                    }
-                    sendConfirmationEmail(req, res, emailConfirmationCode, email, function(err){
-                        if (err) {
-                            users.close();
-                            req.flash('error', "Your email address has been modified but the confirmation email was not sent !");
-                            res.redirect('/settings');
-                            return;
-                        }
-                        users.close();
-                        req.flash('success', "Your email is now updated !");
-                        req.flash('info', "You will receive a confirmation link at your email address in a few minutes.");
-                        res.redirect('/settings');
-                        return;
-                    });
-                    
-                });
-            }
         });
+    })
+    .catch(e => {
+        if(e instanceof UserNotFound)
+            req.flash('error', 'User not found !');
+        else if(e instanceof EmailAlreadyExistsError)
+            req.flash('error', 'Email already exists');
+        else if(e instanceof EmailNotSentError)
+            req.flash('error', "Mail not sent, an error has occured.");
+        else {
+            console.log(e);
+            req.flash('error', "A mistake happened at our side, please retry !");
+        }
+        res.redirect('/settings');
     });
 };
 
 exports.postModifyFirstName = function(req, res){
-    var iv = new InputValidator();
-    var firstName = req.body.first_name;
+    let iv = new InputValidator();
+    let firstName = req.body.first_name.trim();
     iv.testInput(registrationCB.testName, firstName); 
     if(iv.hasError){
         req.flash('error',iv.errorMsg);
@@ -456,47 +353,30 @@ exports.postModifyFirstName = function(req, res){
         res.redirect("/settings");
         return;
     }
-    var users = new UserModel();
-    users.load(function(err) {
-        if(err){
-            users.close();
-            req.flash('error', "A mistake happened, you can retry to change your first name");
-            res.redirect('/settings');
-            return;
+    User.userExists({email: req.user.email})
+    .then((exists) =>{
+        if (!exists)
+            throw new UserNotFound();
+        return User.update({email: req.user.email}, {'extras.firstName': firstName});
+    })
+    .then(() => {
+        req.flash('success', "Your first name is now updated !");
+        res.redirect('/settings');
+    })
+    .catch(e => {
+        if(e instanceof UserNotFound)
+            req.flash('error', 'User not found !');
+        else {
+            console.log(e);
+            req.flash('error', "A mistake happened at our side, please retry !");
         }
-        users.emailExists(req.user.email, function(err, exists) {
-            if(err){
-                users.close();
-                req.flash('error', "A mistake happened, you can retry to change your first name");
-                res.redirect('/settings');
-                return;
-            }
-            if (exists) {
-                users.addExtras({email : req.user.email}, {firstName: firstName}, function(err, extras){
-                    if(err){
-                        users.close();
-                        req.flash('error', "A mistake happened, you can retry to change your first name");
-                        res.redirect('/settings');
-                        return;
-                    }
-                    users.close();
-                    req.flash('success', "Your first name is now updated !");
-                    res.redirect('/settings');
-                    return;
-                });
-            } else {
-                users.close();
-                req.flash('error', "User doesn't exist");
-                res.redirect('/logout');
-                return;
-            }
-        });
+        res.redirect('/settings');
     });
 };
 
 exports.postModifyLastName = function(req, res){
-    var iv = new InputValidator();
-    var lastName = req.body.last_name;
+    let iv = new InputValidator();
+    let lastName = req.body.last_name.trim();
     iv.testInput(registrationCB.testName, lastName); 
     if(iv.hasError){
         req.flash('error',iv.errorMsg);
@@ -508,85 +388,60 @@ exports.postModifyLastName = function(req, res){
         res.redirect("/settings");
         return;
     }
-    var users = new UserModel();
-    users.load(function(err) {
-        if(err){
-            users.close();
-            req.flash('error', "A mistake happened, you can retry to change your last name");
-            res.redirect('/settings');
-            return;
+    User.userExists({email: req.user.email})
+    .then((exists) =>{
+        if (!exists)
+            throw new UserNotFound();
+        return User.update({email: req.user.email}, {'extras.lastName': lastName});
+    })
+    .then(() => {
+        req.flash('success', "Your last names is now updated !");
+        res.redirect('/settings');
+    })
+    .catch(e => {
+        if(e instanceof UserNotFound)
+            req.flash('error', 'User not found !');
+        else {
+            console.log(e);
+            req.flash('error', "A mistake happened at our side, please retry !");
         }
-        users.emailExists(req.user.email, function(err, exists) {
-            if(err){
-                users.close();
-                req.flash('error', "A mistake happened, you can retry to change your last name");
-                res.redirect('/settings');
-                return;
-            }
-            if (exists) {
-                users.addExtras({email : req.user.email}, {lastName: lastName}, function(err, extras){
-                    if(err){
-                        users.close();
-                        req.flash('error', "A mistake happened, you can retry to change your last name");
-                        res.redirect('/settings');
-                        return;
-                    }
-                    users.close();
-                    req.flash('success', "Your last name is now updated !");
-                    res.redirect('/settings');
-                    return;
-                });
-            } else {
-                users.close();
-                req.flash('error', "User doesn't exist");
-                res.redirect('/logout');
-                return;
-            }
-        });
+        res.redirect('/settings');
     });
 };
 
 exports.postDeleteAccount = function(req, res){
-    var password = req.body.password;
-    var users = new UserModel();
-    users.load(function(err) {
-        if(err){
-            users.close();
-            req.flash('error', "A mistake happened, you can retry to delete your account");
-            res.redirect('/settings');
-            return;
+    let password = req.body.password;
+    User.userExists({email: req.user.email})
+    .then((exists) =>{
+        if (!exists)
+            throw new UserNotFound();
+        return User.isPasswordValid({email: req.user.email}, password)
+    })
+    .then(isValid => {
+        if (!isValid){
+            throw new WrongPasswordError();
         }
-        users.isPasswordValid(req.user.email, password, function(err, result){
-            if(err || !result.emailExists){
-                users.close();
-                req.flash('error', "A mistake happened, you can retry to delete your account");
-                res.redirect('/settings');
-                return;
-            } else if (!result.passwordsMatch) {
-                users.close();
-                req.flash('error', "The password is not correct");
-                res.redirect('/settings');
-                return;
-            } else {
-                users.removeUser(req.user.email, function(err){
-                    if(err){
-                        users.close();
-                        req.flash('error', "A mistake happened, you can retry to delete your account");
-                        res.redirect('/settings');
-                        return;
-                    }
-                    users.close();
-                    req.flash('success', "Your account has been deleted");
-                    req.logout();
-                    res.redirect('/');
-                });
-            }
-            
-        });
+        return User.removeUser({email: req.user.email});
+    })
+    .then(() => {
+        req.flash('success', "Your account has been deleted");
+        req.logout();
+        res.redirect('/');
+    })
+    .catch(e => {
+        if(e instanceof UserNotFound)
+            req.flash('error', 'User not found');
+        if(e instanceof WrongPasswordError)
+            req.flash('error', 'You entered a wrong password !');
+        else {
+            console.log(e);
+            req.flash('error', "A mistake happened at our side, please retry !");
+        }
+        res.redirect('/settings');
     });
 };
 
-var sendConfirmationEmail = (req, res, confirmationToken, email, cb) => {
+const sendConfirmationEmail = (req, res, confirmationToken, email, cb) => {
     UserspaceMailer.send(req, {
         email: email, 
         subject: 'Activate your account', 

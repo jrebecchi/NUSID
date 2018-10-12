@@ -1,9 +1,10 @@
 const AppTester = require('../../utils/app-tester.js');
+const User = require('../../../bundles/UserspaceBundle/model/UserModel.js');
 
 let appTester;
 let request;
 
-let testUser = {
+let testUser1 = {
     username: "johnsmith", 
     email: "john@smith.com", 
     password: "password", 
@@ -13,8 +14,17 @@ let testUser = {
     conditions: true
 };
 
-beforeAll(() => {
+let testUser2 = {
+    username: 'alicesmith', 
+    email: 'alice.smith@test.com', 
+    password: "password", 
+    confirm_password: "password",
+    first_name: "john",
+    last_name: "smith",
+    conditions: true
+};
 
+beforeAll((done) => {
     appTester = new AppTester({useMockAuthentificaiton: false});
     request = appTester.getRequestSender();
     
@@ -22,16 +32,18 @@ beforeAll(() => {
         expect(global.userspaceMailOptions).toBeTruthy();
         done();
     });
+
+    appTester.connectDB(done);
 });
 
 
 describe('Test login with good credentials', () => {
     test('Register - login -logout ', (done) => {
-        request.post('/register').send(testUser)
+        request.post('/register').send(testUser1)
         .then((response) => {
             expect(response.header.location).toBe("/login");
             expect(response.statusCode).toBe(302);
-            return request.post('/login').send({username: testUser.email, password: testUser.password})
+            return request.post('/login').send({username: testUser1.email, password: testUser1.password})
         })
         .then((response) => {
             expect(response.statusCode).toBe(302);
@@ -51,20 +63,18 @@ describe('Test login with good credentials', () => {
 });
 
 describe('Test login with bad credentials', () => {
-    testUser.email = 'alice.smith@test.com';
-    testUser.username = 'alicesmith';
 
     test('Register - login with wrong email - login with wrong password ', (done) => {
-        request.post('/register').send(testUser)
+        request.post('/register').send(testUser2)
         .then((response) => {
             expect(response.header.location).toBe("/login");
             expect(response.statusCode).toBe(302);
-            return request.post('/login').send({username: 'badadress@test.com', password: testUser.password});
+            return request.post('/login').send({username: 'badadress@test.com', password: testUser2.password});
         })
         .then((response) => {
             expect(response.statusCode).toBe(302);
             expect(response.header.location.includes("login")).toBeTruthy();
-            return request.post('/login').send({username: testUser.email, password: 'badpassword'})
+            return request.post('/login').send({username: testUser2.email, password: 'badpassword'})
         })
         .then((response) => {
             expect(response.statusCode).toBe(302);
@@ -74,6 +84,12 @@ describe('Test login with bad credentials', () => {
     }, 100000);
 });
 
-afterEach((done) =>{
-    appTester.removeUser(testUser.email ,done);
+afterAll((done) =>{
+    User.removeUser({email: testUser1.email})
+    .then(() => {
+        return User.removeUser({email: testUser2.email});
+    })
+    .then(() => {
+        appTester.disconnectDB(done);
+    })
 });

@@ -1,4 +1,5 @@
 const AppTester = require('../../utils/app-tester.js');
+const User = require('../../../bundles/UserspaceBundle/model/UserModel.js');
 
 let appTester;
 let request;
@@ -21,7 +22,7 @@ let testUserDesired1 = {
     last_name: "smoothy",
 };
 
-beforeAll(() => { 
+beforeAll((done) => { 
     appTester = new AppTester({useMockAuthentificaiton: false});
     request = appTester.getRequestSender();
 
@@ -29,6 +30,8 @@ beforeAll(() => {
         expect(global.userspaceMailOptions).toBeTruthy();
         done();
     });
+
+    appTester.connectDB(done);
 });
 
 describe('Test account modification with bad credentials', () => {  
@@ -77,6 +80,9 @@ describe('Test account modification with bad credentials', () => {
     }, 100000);
 });
 
-afterAll((done) =>{
-    appTester.removeUser(testUser.email, done);
+afterAll((done) =>{    
+    User.removeUser({email: testUser.email})
+    .then(() => {
+        appTester.disconnectDB(done);
+    })
 });

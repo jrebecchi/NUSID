@@ -1,4 +1,5 @@
 const AppTester = require('../../utils/app-tester.js');
+const User = require('../../../bundles/UserspaceBundle/model/UserModel.js');
 let appTester;
 let request;
 
@@ -17,17 +18,18 @@ beforeAll((done) => {
     appTester = new AppTester({useMockAuthentificaiton: false});
     request = appTester.getRequestSender();
 
-    request.post('/register').send(testUser)
-    .then((response) => {
-        expect(response.header.location).toBe("/login");
-        expect(response.statusCode).toBe(302);
-        done();
-    })
+    appTester.connectDB(done);
+    
 });
 
 describe("Test if detect email/username already taken", () => {
     test('Test email', (done) => {
-        return request.get("/email-exists?email="+testUser.email)
+        request.post('/register').send(testUser)
+        .then((response) => {
+            expect(response.header.location).toBe("/login");
+            expect(response.statusCode).toBe(302);
+            return request.get("/email-exists?email="+testUser.email)
+        })
         .then((response) => {
             let answer = JSON.parse(response.text);
             expect(answer.emailExists).toBeTruthy();
@@ -56,5 +58,8 @@ describe("Test if detect email/username already taken", () => {
 });
 
 afterAll((done) =>{
-    appTester.removeUser(testUser.email ,done);
+    User.removeUser({email: testUser.email})
+    .then(() => {
+        appTester.disconnectDB(done);
+    })
 });

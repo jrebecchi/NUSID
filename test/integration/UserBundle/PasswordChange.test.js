@@ -1,4 +1,5 @@
 const AppTester = require('../../utils/app-tester.js');
+const User = require('../../../bundles/UserspaceBundle/model/UserModel.js');
 
 let appTester;
 let request;
@@ -15,7 +16,7 @@ let testUser = {
 
 let passwordDesired = "newpassword";
 
-beforeAll(() => {
+beforeAll((done) => {
 
     appTester = new AppTester({useMockAuthentificaiton: false});
     request = appTester.getRequestSender();
@@ -24,6 +25,8 @@ beforeAll(() => {
         expect(global.userspaceMailOptions).toBeTruthy();
         done();
     });
+
+    appTester.connectDB(done);
 });
 
 
@@ -62,5 +65,8 @@ describe('Test Modifying password', () => {
 });
 
 afterAll((done) =>{
-    appTester.removeUser(testUser.email ,done);
+    User.removeUser({email: testUser.email})
+    .then(() => {
+        appTester.disconnectDB(done);
+    })
 });

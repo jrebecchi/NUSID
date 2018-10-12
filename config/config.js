@@ -12,7 +12,7 @@ var csrf = require('csurf');
 var helmet = require('helmet');
 
 exports.init = function(app){
-    app.use(express.static(path.resolve(__dirname, 'client')));
+    app.use(express.static(path.resolve(__dirname, '../client')));
     app.use(cookieParser('userspaceSecret'));
     app.use(session({ 
         cookie : {

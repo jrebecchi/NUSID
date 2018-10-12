@@ -1,17 +1,16 @@
 const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
 const Express = require('express');
-const config = require('../../config.js'); 
+const config = require('../../config/config'); 
 const sessionize = require('supertest-session');
 const userspaceBundleRooter = require('../../bundles/UserspaceBundle/router/Router.js');
 const mainBundleRooter = require('../../bundles/MainBundle/router/Router.js');
 const myOwnBundleRooter = require('../../bundles/MyOwnBundle/router/Router.js');
 const path =require('path');
-var userspaceBundle = require('../../bundles/UserspaceBundle/UserspaceBundle');
-var mainBundle = require('../../bundles/MainBundle/MainBundle');
-var myOwnBundle = require('../../bundles/MyOwnBundle/MyOwnBundle');
-const DB = require('../../bundles/UserspaceBundle/service/db/MongodbService.js');
-
+const userspaceBundle = require('../../bundles/UserspaceBundle/UserspaceBundle');
+const mainBundle = require('../../bundles/MainBundle/MainBundle');
+const myOwnBundle = require('../../bundles/MyOwnBundle/MyOwnBundle');
+const db = require('../../config/db');
 
 global.userspaceMailOptions = {
     host: 'smtp.ethereal.email',
@@ -36,9 +35,6 @@ const AppTester = function (options){
         mainBundle.init(this.app);
         myOwnBundle.init(this.app);
     }
-
-    
-    
     //Add the view folders
     
     this.app.set('views', [
@@ -49,6 +45,14 @@ const AppTester = function (options){
 
     
     this.request = sessionize(this.app);
+
+    this.connectDB = (done) => {
+        db.init(done);
+    }
+
+    this.disconnectDB = (done) =>{
+        db.close(done)
+    }
 
     this.getRequestSender = () => {
         return this.request;
@@ -70,55 +74,6 @@ const AppTester = function (options){
         });
         return queryArguments;
     }
-
-    this.removeUser = (email, done) => {
-        var db = new DB({});
-        var COLLECTION = 'users';
-        db.connect((err) => {
-            if (err) {
-                done(err);
-            }
-            db.loadCollection(COLLECTION, (err) => {
-                if (err) {
-                    done(err);
-                }
-                db.delete(COLLECTION, {
-                    email: email
-                }, function(err) {
-                    if (err) {
-                        done(err);
-                    }
-                    done();
-                });
-            });
-        });  
-    };
-
-    this.getUser = (email) => {
-        return new Promise((resolve, reject) => {
-            const db = new DB({});
-            const COLLECTION = 'users';
-            db.connect((err) => {
-                if (err) {
-                    reject(err);
-                }
-                db.loadCollection(COLLECTION, (err) => {
-                    if (err) {
-                       reject(err); 
-                    }
-                    db.find(COLLECTION, {
-                        email: email
-                    }, function(err, user) {
-                        if (err || !user) {
-                            reject(Error("No user"));
-                        }
-                        resolve(user);
-                    }); 
-                });
-            });
-        });
-       
-    };
 
     if (options.useMockAuthentificaiton){
         this.loginMockUser = (mockUser) => {

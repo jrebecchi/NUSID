@@ -1,6 +1,10 @@
-var passport = require('passport');
-var UserModel = require("../../model/UserModel");
-var Strategy = require('passport-local').Strategy;
+const passport = require('passport');
+const Strategy = require('passport-local').Strategy;
+const User = require('../../model/UserModel');
+class WrongPasswordError extends Error {};
+class WrongLoginError extends Error {};
+class UserNotFound extends Error {};
+
 
 module.exports.init = function(){
     // Configure the local strategy for use by Passport.
@@ -9,35 +13,31 @@ module.exports.init = function(){
     // that the password is correct and then invoke `cb` with a user object, which
     // will be set at `req.user` in route handlers after authentication.
     passport.use(new Strategy(
-        function(email, password, cb) {
-            var users = new UserModel();
-            users.load(function(err) {
-                if (err) {
-                    users.close();
-                    return cb(err);
-                }
-                users.authenticateUser(email, password, function(err, result) {
-                    if (err) {
-                        users.close();
-                        return cb(err);
-                    }
-                    if (!result.userExists || !result.passwordsMatch) {
-                        users.close();
-                        return cb(null, false);
-                    } else {
-                        users.getUserForToken(result.token, function(err, user) {
-                            if (err) {
-                                users.close();
-                                return cb(err);
-                            } else {
-                                users.close();
-                                return cb(null, user);
-                            }
-                        });
-                    }
-                });
+        function(login, password, cb) {
+            let emailFound;
+            let usernameFound;
+            User.userExists({email: login})
+            .then(emailExists => {
+                emailFound = emailExists;
+                return User.userExists({username: login});
+            })
+            .then(usernameExists => {
+                usernameFound = usernameExists;
+                if (emailFound)
+                    return User.authenticate({email: login}, password)
+                else if (usernameFound)
+                    return User.authenticate({username: login}, password)
+                else 
+                    throw new WrongLoginError();
+            })
+            .then(user => {
+                return cb(null, user);
+            })
+            .catch(e => {
+                return cb(null, false);
             });
-        }));
+        })
+    );
 
     // Configure Passport authenticated session persistence.
     //
@@ -47,40 +47,32 @@ module.exports.init = function(){
     // serializing, and querying the user record by ID from the database when
     // deserializing.
     passport.serializeUser(function(user, cb) {
-        var users = new UserModel();
-        users.load(function(err) {
-            if (err) {
-                users.close();
-                return cb(err, null);
-            }
-            users.getTokenForUsername(user.username, function(err, token) {
-                if (err || !token) {
-                    users.close();
-                    return cb("No user found", null);
-                } else {
-                    users.close();
-                    return cb(null, token);
-                }
-            });
-        });
+        User.userExists({username: user.username})
+        .then(userExists => {
+            if (!userExists)
+                throw new UserNotFound();
+            return User.getUser({username: user.username})
+        })
+        .then(userFound => {
+            return cb(null, userFound.token);
+        })
+        .catch(e => {
+            return cb("User not found - Empty your cookies !", null);
+        })
     });
 
     passport.deserializeUser(function(token, cb) {
-        var users = new UserModel();
-        users.load(function(err) {
-            if (err) {
-                users.close();
-                return cb(err, null);
-            }
-            users.getUserForToken(token, function(err, user) {
-                if (err || !user) {
-                    users.close();
-                    return cb("No user found", null);
-                } else {
-                    users.close();
-                    return cb(null, user);
-                }
-            });
-        });
+        User.userExists({token: token})
+        .then(userExists => {
+            if (!userExists)
+                throw new UserNotFound();
+            return User.getUser({token: token})
+        })
+        .then(user => {
+            return cb(null, user);
+        })
+        .catch(e => {
+            return cb("User not found - Empty your cookies !", null);
+        })
     });
 };

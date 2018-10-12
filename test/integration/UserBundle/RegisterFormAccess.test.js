@@ -1,4 +1,5 @@
 const AppTester = require('../../utils/app-tester.js');
+const User = require('../../../bundles/UserspaceBundle/model/UserModel.js');
 
 let appTester;
 let request;
@@ -13,7 +14,7 @@ let testUser = {
     conditions: true
 };
 
-beforeAll(() => {
+beforeAll((done) => {
 
     appTester = new AppTester({useMockAuthentificaiton: false});
     request = appTester.getRequestSender();
@@ -22,6 +23,8 @@ beforeAll(() => {
         expect(global.userspaceMailOptions).toBeTruthy();
         done();
     });
+
+    appTester.connectDB(done);
 });
 
 describe('Test access to the register form when connected and not connected', () => {
@@ -53,5 +56,8 @@ describe('Test access to the register form when connected and not connected', ()
 });
 
 afterAll((done) =>{
-    appTester.removeUser(testUser.email ,done);
+    User.removeUser({email: testUser.email})
+    .then(() => {
+        appTester.disconnectDB(done);
+    })
 });

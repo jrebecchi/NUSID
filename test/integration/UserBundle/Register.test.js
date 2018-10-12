@@ -1,4 +1,5 @@
 const AppTester = require('../../utils/app-tester.js');
+const User = require('../../../bundles/UserspaceBundle/model/UserModel.js');
 
 let appTester;
 let request;
@@ -12,7 +13,7 @@ let testUser = {
     conditions: true
 };
 
-beforeAll(() => {
+beforeAll((done) => {
     
     appTester = new AppTester({useMockAuthentificaiton: false});
     request = appTester.getRequestSender();
@@ -21,12 +22,13 @@ beforeAll(() => {
         expect(global.userspaceMailOptions).toBeTruthy();
         done();
     });
+    appTester.connectDB(done);
+});
 
-    test('Acces to sign up form', (done) => {
-        request.get('/register').then((response) => {
-            expect(response.statusCode).toBe(200);
-            done();
-        });
+test('Acces to sign up form', (done) => {
+    request.get('/register').then((response) => {
+        expect(response.statusCode).toBe(200);
+        done();
     });
 });
 
@@ -150,5 +152,8 @@ describe('User Registration', () => {
 });
 
 afterAll((done) =>{
-    appTester.removeUser(testUser.email, done);
+    User.removeUser({email: testUser.email})
+    .then(() => {
+        appTester.disconnectDB(done);
+    })
 });

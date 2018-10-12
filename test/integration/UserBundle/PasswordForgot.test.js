@@ -1,4 +1,5 @@
 const AppTester = require('../../utils/app-tester.js');
+const User = require('../../../bundles/UserspaceBundle/model/UserModel.js');
 let appTester;
 let request;
 
@@ -15,7 +16,7 @@ let testUser = {
 let newPassword = "password2";
 let updatePasswordToken;
 
-beforeAll(() => {
+beforeAll((done) => {
 
     appTester = new AppTester({useMockAuthentificaiton: false});
     request = appTester.getRequestSender();
@@ -24,6 +25,8 @@ beforeAll(() => {
         expect(global.userspaceMailOptions).toBeTruthy();
         done();
     });
+
+    appTester.connectDB(done);
 });
 
 describe('Test access to the login form when connected and not connected', () => {
@@ -45,7 +48,7 @@ describe('Test access to the login form when connected and not connected', () =>
         .then((response) => {
             expect(response.statusCode).toBe(302);
             expect(response.header.location).toBe("/login");
-            return appTester.getUser(testUser.email);
+            return User.getUser({email: testUser.email});
         })
         .then((user) => {
             expect(user).toBeTruthy();
@@ -76,5 +79,8 @@ describe('Test access to the login form when connected and not connected', () =>
 });
 
 afterAll((done) =>{
-    appTester.removeUser(testUser.email ,done);
+    User.removeUser({email: testUser.email})
+    .then(() => {
+        appTester.disconnectDB(done);
+    })
 });

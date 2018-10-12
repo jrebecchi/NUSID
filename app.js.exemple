@@ -1,8 +1,12 @@
 //App entry point
 var express = require('express');
 var app = express();
-require('./config').init(app);
 var path = require('path');
+
+require('./config/config').init(app);
+require('./config/db').init();
+
+
 
 //Declare here your bundles
 var userspaceBundle = require('./bundles/UserspaceBundle/UserspaceBundle');
