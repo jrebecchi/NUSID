@@ -30,7 +30,8 @@
   },
   "scripts": {
     "test": "jest --forceExit",
-    "start": "node app.js"
+    "start": "node app.js",
+    "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
