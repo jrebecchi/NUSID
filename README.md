@@ -51,17 +51,17 @@ Then you need to rename the `app.js.exemple` file as `app.js`, and edit it to en
 * [MongoDB](https://www.mongodb.com/) configuration (where will be stored the users) 
 
 ```js
-var dbOptions = {
-	hostname :"dbuser:dbpassword@yourhost.com",
-	port :"XXXXX",
-	database : "YourDataBaseName"
-}
+global.userDBOptions = {
+  hostname :"dbuser:dbpassword@host.com",
+  port :"19150",
+  database : "user_management"
+};
 ```
 
 ##### If you wish to use your local [MongoDB](https://www.mongodb.com/) use the following:
 
 ```js
-var dbOptions = {
+global.userDBOptions = {
 	hostname :"localhost",
 	port :"27017",
 	database : "users"
@@ -71,7 +71,7 @@ var dbOptions = {
 * Email configuration (from where will be sent the administration emails)
 
 ```js
-var userspaceMailOptions = {
+global.userspaceMailOptions = {
   from: 'myemail@myhost.com', //email address
   host: 'smtp.myhost.com', // hostname 
   secureConnection: true, // use SSL 
@@ -240,15 +240,15 @@ exports.init = function(app) {
 ```
 * Step 9: configure the `app.js` file to integrate your new bundle
 
-Import the bundle line 8:
+Import the bundle line 10:
 ```javascript
 var myOwnBundle = require('./bundles/MyOwnBundle/MyOwnBundle');
 ```
-Init the bundle line 33:
+Init the bundle line 37:
 ```javascript
 myOwnBundle.init(app);
 ```
-Add its view folder in the EJS repository line 39:
+Add its view folder in the EJS repository line 43:
 ```javascript
   path.join(__dirname+'/bundles/MyOwnBundle', 'views')
 

@@ -2,11 +2,7 @@
 var express = require('express');
 var app = express();
 var path = require('path');
-
 require('./config/config').init(app);
-require('./config/db').init();
-
-
 
 //Declare here your bundles
 var userspaceBundle = require('./bundles/UserspaceBundle/UserspaceBundle');
@@ -19,6 +15,8 @@ global.userDBOptions = {
   port :"19150",
   database : "user_management"
 };
+
+require('./config/db').init();
 
 //Enter your email options for the userspace from where will be sent the emails
 //Check nodemailer confirguration for more options (https://nodemailer.com)
