@@ -29,8 +29,9 @@ beforeAll((done) => {
     appTester.connectDB(done);
 });
 
-describe('Test access to the login form when connected and not connected', () => {
-    test('Login form accessible when not connected', (done) => {
+describe('User can reset password forgotten', () => {
+    
+    test('Password reset form accessible when not connected', (done) => {
         request.get("/password_reset")
         .then((response) => {
             expect(response.statusCode).toBe(200);
@@ -38,7 +39,7 @@ describe('Test access to the login form when connected and not connected', () =>
         })
     });
 
-    test('Login form not accessible not connected', (done) => {
+    test('Step to establish a new password', (done) => {
         request.post('/register').send(testUser)
         .then((response) => {
             expect(response.header.location).toBe("/login");
