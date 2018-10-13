@@ -30,8 +30,8 @@ beforeAll((done) => {
 });
 
 describe('User can reset password forgotten', () => {
-    
-    test('Password reset form accessible when not connected', (done) => {
+
+    test('Test access to the password reset form', (done) => {
         request.get("/password_reset")
         .then((response) => {
             expect(response.statusCode).toBe(200);
@@ -39,7 +39,29 @@ describe('User can reset password forgotten', () => {
         })
     });
 
-    test('Step to establish a new password', (done) => {
+    test('Test access to the password renew form', (done) => {
+        request.get("/password_renew")
+        .then((response) => {
+            expect(response.statusCode).toBe(200);
+            done();
+        })
+    });
+    
+    test("Password can not be reseted from unexisting email in the database", (done) => {
+        let wrongEmail = "wrong.email@test.com";
+        return request.post('/password_reset').send({email: wrongEmail})
+        .then((response) => {
+            expect(response.statusCode).toBe(302);
+            expect(response.header.location).toBe("/login");
+            return User.userExists({email: wrongEmail});
+        })
+        .then(exists => {
+            expect(exists).toBeFalsy();
+            done();
+        })
+    });
+
+    test('Establishing a new password', (done) => {
         request.post('/register').send(testUser)
         .then((response) => {
             expect(response.header.location).toBe("/login");
