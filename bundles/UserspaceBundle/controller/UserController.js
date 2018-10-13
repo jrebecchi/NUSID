@@ -111,7 +111,7 @@ exports.getConfirmEmail = function(req, res){
     })
     .then(() => {
         req.flash('success', "Your email adress is now confirmed !");
-        res.redirect('/settings');
+        res.redirect('/dashboard');
     })
     .catch(e => {
         if(e instanceof UserNotFound)
@@ -120,7 +120,7 @@ exports.getConfirmEmail = function(req, res){
             console.log(e);
             req.flash('error', "A mistake happened at our side, please retry.");
         }
-        res.redirect('/settings');
+        res.redirect('/');
     });
 };
 
