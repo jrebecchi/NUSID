@@ -1,41 +1,13 @@
-const InputValidator = require("../service/forms/InputValidatorService");
-const registrationCB = require("../service/forms/callbacks/ValidationCallbacks");
 const UserspaceMailer = require('../service/mailer/UserspaceMailer');
 const crypto = require('crypto');
 const User = require('../model/UserModel');
+const ResetPasswordFormValidator = require('../service/forms/ResetPasswordFormValidator');
+const ChangePasswordFormValidator = require('../service/forms/ChangePasswordFormValidator');
 const RECOVER_PASSWORD_TOKEN_LENGTH = 64;
 const DELAY_TO_CHANGE_PASSWORD_IN_MINUTS = 60;
 
 class UpdatePasswordTooLateError extends Error {};
 class UserNotFound extends Error {};
-
-const isFormResetFormValid = (req, res) => {
-    let isFormValid = true;
-    let iv = new InputValidator();
-    iv.testInput(registrationCB.testEmail,req.body.email);
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
-        isFormValid = false;
-    }        
-    return isFormValid;
-};
-
-const isFormChangePasswordFormValid = (req, res) => {
-    let isFormValid = true;
-    let iv = new InputValidator();
-    iv.testInput(registrationCB.testPassword,req.body.password);
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
-        isFormValid = false;
-    }         
-    iv.testInput(registrationCB.testConfirmPassword,req.body.confirm_password, req.body.password);
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
-        isFormValid = false;
-    }   
-    iv.testInput(registrationCB.testEmail,req.body.email);
-    return isFormValid;
-};
 
 const generateToken = (cb) => {
     return crypto.randomBytes(RECOVER_PASSWORD_TOKEN_LENGTH, cb).toString("hex");
@@ -51,10 +23,11 @@ exports.postChangePassword = function (req, res){
     let newPassword = req.body.password;
     let user;
 
-    if(!isFormChangePasswordFormValid(req, res)){
+    if(!ChangePasswordFormValidator.isValid(req)){
         res.redirect('/password_renew?token='+token);
         return;
     }
+
     User.userExists({'extras.updatePasswordToken': token})
     .then((exists) =>{
         if (!exists)
@@ -117,7 +90,7 @@ exports.postResetPassword = function (req, res){
         return;
     }
     let email = req.body.email;
-    if(!isFormResetFormValid(req, res)){
+    if(!ResetPasswordFormValidator.isValid(req, res)){
         res.redirect('/password_reset?email='+email);
         return;
     }

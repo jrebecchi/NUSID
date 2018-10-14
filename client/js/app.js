@@ -1,5 +1,5 @@
-var InputValidator = require("../../bundles/UserspaceBundle/service/forms/InputValidatorService");
-var registrationCB = require("../../bundles/UserspaceBundle/service/forms/callbacks/ValidationCallbacks");
+var InputValidator = require("../../bundles/UserspaceBundle/service/forms/lib/InputValidator");
+var registrationCB = require("../../bundles/UserspaceBundle/service/forms/lib/callbacks/ValidationCallbacks");
 
 
 var app = angular.module('app', []);

@@ -87,8 +87,8 @@ exports.testImperativeCheckBox = function(checkBoxValue){
     return {hasError, errorMsg};
 }
 },{}],3:[function(require,module,exports){
-var InputValidator = require("../../bundles/UserspaceBundle/service/forms/InputValidatorService");
-var registrationCB = require("../../bundles/UserspaceBundle/service/forms/callbacks/ValidationCallbacks");
+var InputValidator = require("../../bundles/UserspaceBundle/service/forms/lib/InputValidator");
+var registrationCB = require("../../bundles/UserspaceBundle/service/forms/lib/callbacks/ValidationCallbacks");
 
 
 var app = angular.module('app', []);
@@ -277,4 +277,4 @@ app.controller('settings', function($scope, $http) {
     }
     
 });
-},{"../../bundles/UserspaceBundle/service/forms/InputValidatorService":1,"../../bundles/UserspaceBundle/service/forms/callbacks/ValidationCallbacks":2}]},{},[3]);
+},{"../../bundles/UserspaceBundle/service/forms/lib/InputValidator":1,"../../bundles/UserspaceBundle/service/forms/lib/callbacks/ValidationCallbacks":2}]},{},[3]);

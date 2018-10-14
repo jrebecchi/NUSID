@@ -1,59 +1,22 @@
-const InputValidator = require("../service/forms/InputValidatorService");
-const registrationCB = require("../service/forms/callbacks/ValidationCallbacks");
 const UserspaceMailer = require('../service/mailer/UserspaceMailer');
 const crypto = require('crypto');
-const CONFIRM_EMAIL_TOKEN_LENGTH = 64;
 const User = require('../model/UserModel');
-
+const RegistrationFormValidator = require('../service/forms/RegistrationFormValidator');
+const ModifyFirstNameFormValidator = require('../service/forms/ModifyFirstNameFormValidator');
+const ModifyLastNameFormValidator = require('../service/forms/ModifyLastNameFormValidator');
+const ModifyPasswordFormValidator = require('../service/forms/ModifyPasswordFormValidator');
+const ModifyEmailFormValidator = require('../service/forms/ModifyEmailFormValidator');
+const ModifyUsernameFormValidator = require('../service/forms/ModifyUsernameFormValidator');
 class EmailNotSentError extends Error {};
 class EmailAlreadyExistsError extends Error {};
 class UsernameAlreadyExistsError extends Error {};
 class WrongPasswordError extends Error {};
 class UserNotFound extends Error {};
 
+const CONFIRM_EMAIL_TOKEN_LENGTH = 64;
+
 const generateToken = function (cb) {
     return crypto.randomBytes(CONFIRM_EMAIL_TOKEN_LENGTH, cb).toString("hex");
-};
-
-const isRegistrationFormValid = function(req, res){
-    let isFormValid = true;
-    let iv = new InputValidator();
-    iv.testInput(registrationCB.testUsername, req.body.username.trim()); 
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
-        isFormValid = false;
-    }
-    iv.testInput(registrationCB.testEmail,req.body.email.trim());
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
-        isFormValid = false;
-    }        
-    iv.testInput(registrationCB.testPassword,req.body.password);
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
-        isFormValid = false;
-    }         
-    iv.testInput(registrationCB.testConfirmPassword,req.body.confirm_password, req.body.password);
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
-        isFormValid = false;
-    }         
-    iv.testInput(registrationCB.testName,req.body.first_name.trim());
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
-        isFormValid = false;
-    }           
-    iv.testInput(registrationCB.testName,req.body.last_name.trim());
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
-        isFormValid = false;
-    }             
-    iv.testInput(registrationCB.testImperativeCheckBox,req.body.conditions);
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
-        isFormValid = false;
-    }
-    return isFormValid;
 };
 
 exports.getCheckEmailExists = function (req, res){
@@ -140,7 +103,7 @@ exports.postCreateUser = function (req, res){
             emailConfirmationCode: generateToken()
         }
     };
-    if (!isRegistrationFormValid(req, res)){
+    if (!RegistrationFormValidator.isValid(req, res)){
         res.redirect('/register?username='+user.username+'&email='+user.email+'&lastName='+user.extras.lastName+'&firstName='+user.extras.firstName);
         return;
     }
@@ -198,19 +161,9 @@ exports.getSendConfirmationEmail = function(req, res){
 };
 
 exports.postModifyPassword = function(req, res){
-    let iv = new InputValidator();
     let oldPassword = req.body.old_password;
     let newPassword = req.body.password;
-    let confirmNewPassword = req.body.confirm_password;
-    iv.testInput(registrationCB.testPassword, newPassword, confirmNewPassword); 
-    if (iv.hasError){
-        req.flash('error',iv.errorMsg);
-        res.redirect("/settings");
-        return;
-    }
-    iv.testInput(registrationCB.testConfirmPassword, confirmNewPassword, newPassword); 
-    if (iv.hasError){
-        req.flash('error',iv.errorMsg);
+    if (!ModifyPasswordFormValidator.isValid(req)){
         res.redirect("/settings");
         return;
     }
@@ -244,11 +197,8 @@ exports.postModifyPassword = function(req, res){
 };
 
 exports.postModifyUsername = function(req, res){
-    let iv = new InputValidator();
     let username = req.body.username.trim();
-    iv.testInput(registrationCB.testUsername, username); 
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
+    if (!ModifyUsernameFormValidator.isValid(req)){
         res.redirect("/settings");
         return;
     }
@@ -286,12 +236,9 @@ exports.postModifyUsername = function(req, res){
 };
 
 exports.postModifyEmail = function(req, res){
-    let iv = new InputValidator();
     let email = req.body.email.trim();
     let emailConfirmationCode;
-    iv.testInput(registrationCB.testEmail, email); 
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
+    if (!ModifyEmailFormValidator.isValid(req)){
         res.redirect("/settings");
         return;
     }
@@ -340,11 +287,8 @@ exports.postModifyEmail = function(req, res){
 };
 
 exports.postModifyFirstName = function(req, res){
-    let iv = new InputValidator();
     let firstName = req.body.first_name.trim();
-    iv.testInput(registrationCB.testName, firstName); 
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
+    if (!ModifyFirstNameFormValidator.isValid(req)){
         res.redirect("/settings");
         return;
     }
@@ -375,11 +319,8 @@ exports.postModifyFirstName = function(req, res){
 };
 
 exports.postModifyLastName = function(req, res){
-    let iv = new InputValidator();
     let lastName = req.body.last_name.trim();
-    iv.testInput(registrationCB.testName, lastName); 
-    if(iv.hasError){
-        req.flash('error',iv.errorMsg);
+    if (!ModifyLastNameFormValidator.isValid(req)){
         res.redirect("/settings");
         return;
     }
