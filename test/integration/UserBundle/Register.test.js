@@ -57,6 +57,50 @@ describe('Prevent user registration when wrong inputs', () => {
         });
     });
 
+    test('Prevent user registration when password to short', (done) => {
+        request.post('/register').send({
+            username: "username", 
+            email: "test@test.com", 
+            password: "p", 
+            confirm_password: "p",
+            first_name: "firstname",
+            last_name: "lastname",
+            conditions: false
+        })
+        .then((response) => {
+            expect(response.header.location.includes("register")).toBeTruthy();
+            expect(response.statusCode).toBe(302);
+            args = appTester.getQueryArguments(response.header.location);
+            expect(args.username).toBe("username");
+            expect(args.email).toBe("test@test.com");
+            expect(args.firstName).toBe("firstname");
+            expect(args.lastName).toBe("lastname");
+            done();
+        });
+    });
+
+    test('Prevent user registration when bad username', (done) => {
+        request.post('/register').send({
+            username: "user name", 
+            email: "test@test.com", 
+            password: "p", 
+            confirm_password: "p",
+            first_name: "firstname",
+            last_name: "lastname",
+            conditions: false
+        })
+        .then((response) => {
+            expect(response.header.location.includes("register")).toBeTruthy();
+            expect(response.statusCode).toBe(302);
+            args = appTester.getQueryArguments(response.header.location);
+            expect(args.username).toBe("user%20name");
+            expect(args.email).toBe("test@test.com");
+            expect(args.firstName).toBe("firstname");
+            expect(args.lastName).toBe("lastname");
+            done();
+        });
+    });
+
     test('Prevent user registration when bad email', (done) => {
         request.post('/register').send({
             username: "username", 
@@ -114,8 +158,8 @@ describe('User Registration', () => {
                 email: "test@test.com", 
                 password: "password2", 
                 confirm_password: "password2",
-                first_name: "firstname2",
-                last_name: "lastname2",
+                first_name: "firstname",
+                last_name: "lastname",
                 conditions: true
             });
         })
@@ -125,16 +169,16 @@ describe('User Registration', () => {
             args = appTester.getQueryArguments(response.header.location);
             expect(args.username).toBe("username2");
             expect(args.email).toBe("test@test.com");
-            expect(args.firstName).toBe("firstname2");
-            expect(args.lastName).toBe("lastname2");
+            expect(args.firstName).toBe("firstname");
+            expect(args.lastName).toBe("lastname");
             //Test prevent user registration with same username
             return request.post('/register').send({
                 username: "username", 
                 email: "test2@test.com", 
                 password: "password2", 
                 confirm_password: "password2",
-                first_name: "firstname2",
-                last_name: "lastname2",
+                first_name: "firstname",
+                last_name: "lastname",
                 conditions: true
             });
         })
@@ -144,8 +188,8 @@ describe('User Registration', () => {
             args = appTester.getQueryArguments(response.header.location);
             expect(args.username).toBe("username");
             expect(args.email).toBe("test2@test.com");
-            expect(args.firstName).toBe("firstname2");
-            expect(args.lastName).toBe("lastname2");
+            expect(args.firstName).toBe("firstname");
+            expect(args.lastName).toBe("lastname");
             done();
         });
     }, 10000);
