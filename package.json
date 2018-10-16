@@ -50,5 +50,10 @@
   "bugs": {
     "url": "https://github.com/JohannC/NUSID/issues"
   },
-  "homepage": "https://github.com/JohannC/NUSID#readme"
+  "homepage": "https://github.com/JohannC/NUSID#readme",
+  "jest": {
+    "verbose": true,
+    "collectCoverage": true, 
+    "coverageDirectory": "coverage"
+  }
 }
