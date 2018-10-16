@@ -24,16 +24,6 @@ let testUser2 = {
     conditions: true
 };
 
-let testUser3 = {
-    username: "modemnotfound", 
-    email: "modemnotfound@test.com", 
-    password: "password", 
-    confirm_password: "password",
-    first_name: "modemnotfound",
-    last_name: "modemnotfound",
-    conditions: true
-};
-
 let emailDesired = "rihanna2@test.com";
 
 beforeAll((done) => { 
@@ -172,9 +162,6 @@ afterAll((done) =>{
     })
     .then(() => {
         return User.removeUser({email: testUser2.email});
-    })
-    .then(() => {
-        return User.removeUser({email: testUser3.email});
     })
     .then(() => {
         appTester.disconnectDB(done);
