@@ -100,7 +100,7 @@ User.statics.updateUser = function(filter, data){
 };
 
 User.statics.removeUser = function(filter){
-    return this.remove(filter);
+    return this.deleteOne(filter);
 }; 
 
 module.exports = mongoose.model('user', User);
