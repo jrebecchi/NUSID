@@ -5,12 +5,12 @@ let appTester;
 let request;
 
 let testUser = {
-    username: "mlntest1", 
-    email: "mlntest1@test.com", 
+    username: "mfntest1", 
+    email: "mfntest1@test.com", 
     password: "password", 
     confirm_password: "password",
-    first_name: "mlntest",
-    last_name: "mlntest",
+    first_name: "mfntest",
+    last_name: "mfntest",
     conditions: true
 };
 
