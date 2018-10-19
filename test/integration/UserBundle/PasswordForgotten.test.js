@@ -66,6 +66,27 @@ describe('User can reset password forgotten', () => {
         .then((response) => {
             expect(response.header.location).toBe("/login");
             expect(response.statusCode).toBe(302);
+            return request.post('/login').send({username: testUser.email, password: testUser.password})
+        })
+        .then((response) => {
+            expect(response.statusCode).toBe(302);
+            expect(response.header.location).toBe("/dashboard");
+            //Test can't ask for reset password if logged in
+            return request.post('/password_reset').send({email: testUser.username});
+
+        })
+        .then((response) => {
+            expect(response.statusCode).toBe(302);
+            expect(response.header.location).toBe("/dashboard");
+            return request.get('/dashboard');
+        })
+        .then((response) => {
+            expect(response.statusCode).toBe(200);
+            expect(response.text.includes('Oups, you are already logged in')).toBeTruthy();
+            return request.get('/logout');
+        })
+        .then((response) => {
+            expect(response.statusCode).toBe(302);
             return request.post('/password_reset').send({email: testUser.username});
         })
         .then((response) => {
@@ -87,13 +108,41 @@ describe('User can reset password forgotten', () => {
         })
         .then((response) => {
             expect(response.statusCode).toBe(200);
+            return request.post('/login').send({username: testUser.email, password: testUser.password})
+        })
+        .then((response) => {
+            expect(response.statusCode).toBe(302);
+            expect(response.header.location).toBe("/dashboard");
+            //Test can't change password if logged in
+            return request.post("/password_renew").send({password: newPassword, confirm_password: newPassword, token: updatePasswordToken});
+        })
+        .then((response) => {
+            expect(response.statusCode).toBe(302);
+            expect(response.header.location).toBe("/dashboard");
+            return request.get('/dashboard');
+        })
+        .then((response) => {
+            expect(response.statusCode).toBe(200);
+            expect(response.text.includes('Oups, you are already logged in')).toBeTruthy();
+            return request.get('/logout');
+        })
+        .then((response) => {
+            expect(response.statusCode).toBe(302);
+            //Test reject password when user enter two different ones and redirect user to the same form with token included
             return request.post("/password_renew").send({password: newPassword, confirm_password: "differentpassword", token: updatePasswordToken});
         })
         .then((response) => {
-            //Test reject password when user enter two different ones and redirect user to the same form with token included
             expect(response.statusCode).toBe(302);
             expect(response.header.location.includes("password_renew?token")).toBeTruthy();
             expect(response.header.location.includes(updatePasswordToken)).toBeTruthy();
+            //Test reject password when user enter a wrong password and redirect user to the same form with token included
+            return request.post("/password_renew").send({password: "aa", confirm_password: "aa", token: updatePasswordToken});
+        })
+        .then((response) => {
+            expect(response.statusCode).toBe(302);
+            expect(response.header.location.includes("password_renew?token")).toBeTruthy();
+            expect(response.header.location.includes(updatePasswordToken)).toBeTruthy();
+            
             return request.post("/password_renew").send({password: newPassword, confirm_password: newPassword, token: updatePasswordToken});
         })
         .then((response) => {
