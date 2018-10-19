@@ -5,15 +5,16 @@ const ResetPasswordFormValidator = require('../service/forms/ResetPasswordFormVa
 const ChangePasswordFormValidator = require('../service/forms/ChangePasswordFormValidator');
 const RECOVER_PASSWORD_TOKEN_LENGTH = 64;
 const DELAY_TO_CHANGE_PASSWORD_IN_MINUTS = 60;
-
-class UpdatePasswordTooLateError extends Error {};
-class UserNotFound extends Error {};
+const {
+    UpdatePasswordTooLateError,
+    UserNotFound
+} = require('../service/error/ErrorTypes');
 
 const generateToken = (cb) => {
     return crypto.randomBytes(RECOVER_PASSWORD_TOKEN_LENGTH, cb).toString("hex");
 };
 
-exports.postChangePassword = function (req, res){
+exports.postChangePassword = function (req, res, next){
     if(req.user !== undefined){
         req.flash('error', "Oups, you are already logged in !");
         res.redirect('/dashboard');
@@ -51,17 +52,7 @@ exports.postChangePassword = function (req, res){
         req.flash('success', "Your password has been updated.");
         res.redirect('/login');
     })
-    .catch(e => {
-        if(e instanceof UserNotFound)
-            req.flash('error', "This token has never existed or is no longer in our database.");
-        else if (e instanceof UpdatePasswordTooLateError)
-            req.flash('error', "This link has expired, please ask a new one.");
-        else {
-            console.log(e);
-            req.flash('error', "A mistake happened at our side, please retry !");
-        }
-        res.redirect('/password_reset');
-    });
+    .catch(next);
 };
 
 exports.getShowChangePasswordForm = function (req, res){
@@ -82,7 +73,7 @@ exports.getShowPasswordRecoveryForm = function (req, res){
     res.render('pages/forgot-password.ejs', {email: req.query.email, csrfToken: req.csrfToken() });
 };
 
-exports.postResetPassword = function (req, res){
+exports.postResetPassword = function (req, res, next){
     let updatePasswordToken;
     if(req.user !== undefined){
         req.flash('error', "Oups, you are already logged in !");
@@ -90,7 +81,7 @@ exports.postResetPassword = function (req, res){
         return;
     }
     let email = req.body.email;
-    if(!ResetPasswordFormValidator.isValid(req, res)){
+    if(!ResetPasswordFormValidator.isValid(req, res, next)){
         res.redirect('/password_reset?email='+email);
         return;
     }
@@ -105,15 +96,7 @@ exports.postResetPassword = function (req, res){
     .then(() => {
         sendPasswordRecoveryEmail(req, res, email, updatePasswordToken);
     })
-    .catch(e => {
-        if(e instanceof UserNotFound)
-            req.flash('info', "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.");
-        else {
-            console.log(e);
-            req.flash('error', "A mistake happened at our side, please retry !");
-        }
-        res.redirect('/login');
-    });
+    .catch(next);
 };
 
 const sendPasswordRecoveryEmail = (req, res, email, updatePasswordToken) => {

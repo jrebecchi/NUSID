@@ -8,5 +8,5 @@ exports.init = function(app, emailConfig, dbOptions) {
     PassportAuthentification.init();
 
     //Launch rooter
-    Router.init(app);
+    app.use(Router)
 };

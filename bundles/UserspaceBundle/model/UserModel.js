@@ -4,7 +4,10 @@ const Schema = mongoose.Schema;
 const PasswordEncryption = require('../service/crypto/PasswordEncryption')
 const TOKEN_LENGTH = 64;
 const TOKEN_EXPIRATION = 31 * 24 * 60 * 60 * 1000;
-class WrongPasswordError extends Error {};
+const {
+    UserNotFound,
+    WrongPasswordError,
+} = require('../service/error/ErrorTypes');
 
 const User = new Schema({
     username: String,
@@ -32,7 +35,7 @@ User.statics.getUser = function(filter){
     return this.findOne(filter)
     .then(user => {
         if(user == null){
-            throw new Error("User not found !");
+            throw new UserNotFound();
         }
         return user;
     });

@@ -8,10 +8,9 @@ test('Function init exists', () => {
 });
 
 test('MainBundle router added', () => {
-    const app  = jest.fn();
-    Router.init = jest.fn();
+    const app  = {use: jest.fn()};
     Passport.init = jest.fn();
     UserspaceBundle.init(app);
-    expect(Router.init).toHaveBeenCalledTimes(1);
+    expect(app.use).toHaveBeenCalledTimes(1);
     expect(Passport.init).toHaveBeenCalledTimes(1);
 });

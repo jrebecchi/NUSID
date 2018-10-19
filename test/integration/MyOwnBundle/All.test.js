@@ -30,7 +30,8 @@ describe('Test MyOwnBundle API', () => {
                 emailConfirmed: true
             }
         };
-        appTester.loginMockUser(mockUser).then(() => {
+        appTester.loginMockUser(mockUser)
+        .then(() => {
             return request.get('/myprivatetab');
         })
         .then((response) => {

@@ -43,6 +43,14 @@ app.set('views', [
   path.join(__dirname+'/bundles/MyOwnBundle', 'views')
 ]);
 
+//Call Error handler
+app.use(function (err, req, res, next) {
+  console.log(err);
+  console.log(req);
+  req.flash('error', 'A mistake has happened. Sorry for the inconvenience, we are going to investigate it');
+  res.redirect('/');
+});
+
 //Adapt to your server config
 var http = require('http');
 var server = http.createServer(app);

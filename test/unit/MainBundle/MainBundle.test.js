@@ -6,8 +6,7 @@ test('Function init exists', () => {
 });
 
 test('MainBundle router added', () => {
-    const app  = jest.fn();
-    Router.init = jest.fn();
+    const app  = {use: jest.fn()};
     MainBundle.init(app);
-    expect(Router.init).toHaveBeenCalledTimes(1);
+    expect(app.use).toHaveBeenCalledTimes(1);
 });

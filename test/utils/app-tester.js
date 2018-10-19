@@ -6,7 +6,7 @@ const sessionize = require('supertest-session');
 const userspaceBundleRooter = require('../../bundles/UserspaceBundle/router/Router.js');
 const mainBundleRooter = require('../../bundles/MainBundle/router/Router.js');
 const myOwnBundleRooter = require('../../bundles/MyOwnBundle/router/Router.js');
-const path =require('path');
+const path = require('path');
 const userspaceBundle = require('../../bundles/UserspaceBundle/UserspaceBundle');
 const mainBundle = require('../../bundles/MainBundle/MainBundle');
 const myOwnBundle = require('../../bundles/MyOwnBundle/MyOwnBundle');
@@ -16,8 +16,8 @@ global.userspaceMailOptions = {
     host: 'smtp.ethereal.email',
     port: 587,
     auth: {
-        user: 'bhn7gau3j756yti6@ethereal.email',
-        pass: 'jbqbDP5uEyHTGBjbNT'
+        user: 'x6z5n5ywx7wbpgkb@ethereal.email',
+        pass: 'JAXPXSY9MQP3uHtFjB'
     }
 };
 
@@ -27,16 +27,16 @@ const AppTester = function (options){
     config.init(this.app);
     //Enable bundles
     if (options.useMockAuthentificaiton){
-        userspaceBundleRooter.init(this.app);
-        mainBundleRooter.init(this.app);
-        myOwnBundleRooter.init(this.app);
+        this.app.use(userspaceBundleRooter);
+        this.app.use(mainBundleRooter);
+        this.app.use(myOwnBundleRooter);
     } else {
         userspaceBundle.init(this.app);
         mainBundle.init(this.app);
         myOwnBundle.init(this.app);
     }
+
     //Add the view folders
-    
     this.app.set('views', [
         path.join(__dirname+'../../../bundles/MainBundle', 'views'), 
         path.join(__dirname+'../../../bundles/UserspaceBundle', 'views'),

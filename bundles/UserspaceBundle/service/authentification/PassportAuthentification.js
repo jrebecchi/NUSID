@@ -1,9 +1,10 @@
 const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
 const User = require('../../model/UserModel');
-class WrongPasswordError extends Error {};
-class WrongLoginError extends Error {};
-class UserNotFound extends Error {};
+const {
+    WrongLoginError,
+    UserNotFound
+} = require('../error/ErrorTypes');
 
 
 module.exports.init = function(){
@@ -56,8 +57,8 @@ module.exports.init = function(){
         .then(userFound => {
             return cb(null, userFound.token);
         })
-        .catch(e => {
-            return cb("User not found - Empty your cookies !", null);
+        .catch(err => {
+            return cb(err, null);
         })
     });
 
@@ -71,8 +72,8 @@ module.exports.init = function(){
         .then(user => {
             return cb(null, user);
         })
-        .catch(e => {
-            return cb("User not found - Empty your cookies !", null);
+        .catch(err => {
+            return cb(err, null);
         })
     });
 };
