@@ -145,6 +145,28 @@ describe('Prevent user registration when wrong inputs', () => {
         });
     });
 
+    test('Prevent user registration when different passwords', (done) => {
+        request.post('/register').send({
+            username: "ui", 
+            email: "test@test", 
+            password: "password", 
+            confirm_password: "password",
+            first_name: "firstname",
+            last_name: "lastname",
+            conditions: false
+        })
+        .then((response) => {
+            expect(response.header.location.includes("register")).toBeTruthy();
+            expect(response.statusCode).toBe(302);
+            args = appTester.getQueryArguments(response.header.location);
+            expect(args.username).toBe("ui");
+            expect(args.email).toBe("test@test");
+            expect(args.firstName).toBe("firstname");
+            expect(args.lastName).toBe("lastname");
+            done();
+        });
+    });
+
     test('Prevent user registration when tooshort first and last names', (done) => {
         request.post('/register').send({
             username: "username", 
