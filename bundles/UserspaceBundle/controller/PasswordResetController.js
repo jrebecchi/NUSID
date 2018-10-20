@@ -45,7 +45,7 @@ exports.postChangePassword = function (req, res, next){
         let diff = Math.abs(actualDate - resetDate);
         let minutes = Math.floor((diff/1000)/60);
         if(minutes >= DELAY_TO_CHANGE_PASSWORD_IN_MINUTS)
-            throw new UpdatePasswordTooLateError();
+            throw new UpdatePasswordTooLateError("/password_reset", {type: "error", message:"This link has expired, please ask a new one."});
         return User.resetPassword({email: user.email}, newPassword);
     })
     .then(() => {
@@ -88,7 +88,7 @@ exports.postResetPassword = function (req, res, next){
     User.userExists({email: email})
     .then((exists) =>{
         if (!exists)
-            throw new UserNotFound();
+            throw new UserNotFound('/login', {type: "info", message:"If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes."});
         updatePasswordToken = generateToken();
         let passwordUpdateRequestDate = new Date();
         return User.update({email: email}, {'extras.updatePasswordToken': updatePasswordToken, 'extras.passwordUpdateRequestDate': passwordUpdateRequestDate})
@@ -110,9 +110,7 @@ const sendPasswordRecoveryEmail = (req, res, email, updatePasswordToken) => {
         subject:'Password Recovery',
     }, function (err) {
         if (err) {
-            req.flash('error', "Mail not sent, an error has occured.");
-            res.redirect('/');
-            return;
+            throw new EmailNotSentError("/", {type: "error", message:"Mail not sent, an error has occured."});
         }
         req.flash('info', "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.");
         res.redirect('/login');

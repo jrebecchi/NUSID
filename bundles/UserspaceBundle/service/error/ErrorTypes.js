@@ -1,21 +1,20 @@
+class OperationalError extends Error {
+    constructor(redirection, flashMessage){
+        super();
+        this.redirection = redirection;
+        this.flashMessage = flashMessage
+    }
+}
+
 module.exports = {
-    EmailAlreadyExistsError: class EmailAlreadyExistsError extends Error {
-        constructor(user){
-            super();
-            this.user = user;
-        }
-    },
-    UsernameAlreadyExistsError: class UsernameAlreadyExistsError extends Error {
-        constructor(user){
-            super();
-            this.user = user;
-        }
-    },
-    WrongPasswordError: class WrongPasswordError extends Error {},
-    WrongPasswordError: class WrongPasswordError extends Error {},
-    WrongLoginError:class WrongLoginError extends Error {},
-    UpdatePasswordTooLateError:class UpdatePasswordTooLateError extends Error {},
-    EmailNotSentError: class EmailNotSentError extends Error {},
-    UserNotFound: class UserNotFound extends Error {},
-    EmailNotSentError: class EmailNotSentError extends Error {}, 
+    OperationalError:  OperationalError,
+    EmailAlreadyExistsError: class EmailAlreadyExistsError extends OperationalError {},
+    UsernameAlreadyExistsError: class UsernameAlreadyExistsError extends OperationalError {},
+    WrongPasswordError: class WrongPasswordError extends OperationalError {},
+    WrongPasswordError: class WrongPasswordError extends OperationalError {},
+    WrongLoginError:class WrongLoginError extends OperationalError {},
+    UpdatePasswordTooLateError:class UpdatePasswordTooLateError extends OperationalError {},
+    EmailNotSentError: class EmailNotSentError extends OperationalError {},
+    UserNotFound: class UserNotFound extends OperationalError {},
+    EmailNotSentError: class EmailNotSentError extends OperationalError {}, 
 }

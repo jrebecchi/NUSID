@@ -64,7 +64,7 @@ exports.getConfirmEmail = function(req, res, next){
     User.userExists({'extras.emailConfirmationCode': token})
     .then((exists) =>{
         if (!exists)
-            throw new UserNotFound();
+            throw new UserNotFound('/', {type: "error", message:"This link is no longer valid."});
         return User.getUser({'extras.emailConfirmationCode': token})
     })
     .then(user => {
@@ -100,14 +100,15 @@ exports.postCreateUser = function (req, res, next){
     User.userExists({username: user.username})
     .then(usernameExists => {
         if (usernameExists){
-            throw new UsernameAlreadyExistsError(user);
+            throw new UsernameAlreadyExistsError('/register?username='+user.username+'&email='+user.email+'&lastName='+user.extras.lastName+'&firstName='+user.extras.firstName, {type: "error", message:"Username already exists"});
+            ;
         } else {
             return User.userExists({email: user.email});
         }
     })
     .then(emailExists => {
         if (emailExists){
-            throw new EmailAlreadyExistsError(user);
+            throw new EmailAlreadyExistsError('/register?username='+user.username+'&email='+user.email+'&lastName='+user.extras.lastName+'&firstName='+user.extras.firstName, {type: "error", message:"Email already exists"});
         } else {
             return User.createUser(user);
         }
@@ -116,7 +117,7 @@ exports.postCreateUser = function (req, res, next){
         req.flash('success', 'User created !');
         sendConfirmationEmail(req, res, user.extras.emailConfirmationCode, user.email, function(err){
             if (err) {
-                throw new EmailNotSentError();  
+                throw new EmailNotSentError("/login", {type: "error", message:"Confirmation email not sent, an error has occured."});  
             }
             else {
                 req.flash('info', "You will receive a confirmation link at your email address in a few minutes.");
@@ -130,7 +131,7 @@ exports.postCreateUser = function (req, res, next){
 exports.getSendConfirmationEmail = function(req, res, next){
     sendConfirmationEmail(req, res, req.user.extras.emailConfirmationCode, req.user.email, function(err){
         if (err) {
-            return next(new EmailNotSentError());
+            return next(new EmailNotSentError("/dashboard", {type: "error", message:"Confirmation email not sent, an error has occured."}));
         } else {
             req.flash('success', "You will receive a confirmation link at your email address in a few minutes.");
         }
@@ -153,7 +154,7 @@ exports.postModifyPassword = function(req, res, next){
     })
     .then(isValid => {
         if (!isValid){
-            throw new WrongPasswordError();
+            throw new WrongPasswordError("/settings", {type: "error", message:"You entered a wrong password"});
         }
         return User.resetPassword({email: req.user.email}, newPassword);
     })
@@ -183,7 +184,7 @@ exports.postModifyUsername = function(req, res, next){
     })
     .then(usernameExists => {
         if(usernameExists)
-            throw new UsernameAlreadyExistsError();
+            throw new UsernameAlreadyExistsError("/settings", {type: "error", message:"Username already exists"});
         return User.update({email: req.user.email}, {username: username});
     })
     .then(() => {
@@ -213,7 +214,7 @@ exports.postModifyEmail = function(req, res, next){
     })
     .then(emailExists => {
         if(emailExists)
-            throw new EmailAlreadyExistsError();
+            throw new EmailAlreadyExistsError("/settings", {type: "error", message:"Email already exists"});
         emailConfirmationCode = generateToken();
         return User.update({username: req.user.username}, {email: email, 'extras.emailConfirmationCode': emailConfirmationCode, "extras.emailConfirmed": false});
     })
@@ -221,7 +222,7 @@ exports.postModifyEmail = function(req, res, next){
         req.flash('success', "Your email is now updated !");
         sendConfirmationEmail(req, res, emailConfirmationCode, email, function(err){
             if (err) {
-                throw new EmailNotSentError();  
+                throw new EmailNotSentError("/settings", {type: "error", message:"Confirmation email not sent, an error has occured."});  
             }
             else {
                 req.flash('info', "You will receive a confirmation link at your email address in a few minutes.");
@@ -290,7 +291,7 @@ exports.postDeleteAccount = function(req, res, next){
     })
     .then(isValid => {
         if (!isValid){
-            throw new WrongPasswordError();
+            throw new WrongPasswordError("/settings", {type: "error", message:"You entered a wrong password"});
         }
         return User.removeUser({email: req.user.email});
     })

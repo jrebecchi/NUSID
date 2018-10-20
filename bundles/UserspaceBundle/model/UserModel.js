@@ -92,7 +92,7 @@ User.statics.authenticate = function(filter, password){
             };
             return this.updateOne(filter, data);
         } else {
-            throw new WrongPasswordError("Password does not match")
+            throw new WrongPasswordError()
         }
     })
     .then(() => this.getUser(filter));

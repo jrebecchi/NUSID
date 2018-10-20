@@ -4,8 +4,8 @@ let appTester;
 let request;
 
 let testUser = {
-    username: "JohnDoe", 
-    email: "john.doe@test.com", 
+    username: "JohnDoen", 
+    email: "john.doen@test.com", 
     password: "password", 
     confirm_password: "password",
     first_name: "John",
