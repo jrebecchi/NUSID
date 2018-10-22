@@ -57,6 +57,18 @@ describe('Test login with good credentials', () => {
         })
         .then((response) => {
             expect(response.statusCode).toBe(302);
+            return request.post('/login').send({username: testUser1.email, password: testUser1.password})
+        })
+        .then((response) => {
+            expect(response.statusCode).toBe(302);
+            expect(response.header.location.includes("dashboard")).toBeTruthy();
+            return User.removeUser({email: testUser1.email});
+        })
+        .then(() => {
+            return request.get('/dashboard');
+        })
+        .then((response) => {
+            expect(response.statusCode).toBe(302);
             done();
         });
     }, 100000);

@@ -4,7 +4,6 @@ const UserspaceController  = require("../controller/UserspaceController.js");
 const passport = require('passport');
 const proxy = require('connect-ensure-login');
 const express = require('express');
-const ErrorHandler = require('../service/error/ErrorHandler');
 const router = express.Router();
 
 router.get('/register', function(req, res) {
@@ -78,7 +77,5 @@ router.post('/modify-lastname', proxy.ensureLoggedIn(),function(req, res, next){
 router.post('/delete-account', proxy.ensureLoggedIn(),function(req, res, next){
     UserController.postDeleteAccount(req, res, next);
 });
-
-router.use(ErrorHandler);
 
 module.exports = router;

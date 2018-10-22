@@ -16,5 +16,4 @@ module.exports = {
     UpdatePasswordTooLateError:class UpdatePasswordTooLateError extends OperationalError {},
     EmailNotSentError: class EmailNotSentError extends OperationalError {},
     UserNotFound: class UserNotFound extends OperationalError {},
-    EmailNotSentError: class EmailNotSentError extends OperationalError {}, 
 }

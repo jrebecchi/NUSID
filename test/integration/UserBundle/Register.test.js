@@ -236,7 +236,7 @@ describe('User Registration', () => {
             expect(args.lastName).toBe("lastname");
             done();
         });
-    }, 10000);
+    }, 100000);
 });
 
 afterAll((done) =>{

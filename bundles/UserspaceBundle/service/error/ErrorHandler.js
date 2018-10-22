@@ -14,6 +14,7 @@ module.exports = function (err, req, res, next){
         console.log(req);
         req.flash('error', 'User not found');
         req.logout();
+        res.redirect("/login");
     } else {
         next(err);
     }
