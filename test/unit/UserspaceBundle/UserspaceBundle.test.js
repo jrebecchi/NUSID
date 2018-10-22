@@ -11,6 +11,6 @@ test('MainBundle router added', () => {
     const app  = {use: jest.fn()};
     Passport.init = jest.fn();
     UserspaceBundle.init(app);
-    expect(app.use).toHaveBeenCalledTimes(1);
+    expect(app.use).toHaveBeenCalledTimes(2);
     expect(Passport.init).toHaveBeenCalledTimes(1);
 });
