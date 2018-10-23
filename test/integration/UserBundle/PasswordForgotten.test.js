@@ -142,7 +142,7 @@ describe('User can reset password forgotten', () => {
             expect(response.statusCode).toBe(302);
             expect(response.header.location.includes("password_renew?token")).toBeTruthy();
             expect(response.header.location.includes(updatePasswordToken)).toBeTruthy();
-            
+            //Test can change password
             return request.post("/password_renew").send({password: newPassword, confirm_password: newPassword, token: updatePasswordToken});
         })
         .then((response) => {

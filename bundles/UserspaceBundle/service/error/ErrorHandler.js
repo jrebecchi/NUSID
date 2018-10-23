@@ -11,7 +11,6 @@ module.exports = function (err, req, res, next){
             res.redirect(err.redirection);
     } else if (err instanceof UserNotFound){
         console.log(err);
-        console.log(req);
         req.flash('error', 'User not found');
         req.logout();
         res.redirect("/login");

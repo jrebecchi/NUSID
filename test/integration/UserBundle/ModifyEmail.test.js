@@ -154,7 +154,6 @@ test('Email modification of an user registered', (done) => {
 
 
 
-
 afterAll((done) =>{    
     User.removeUser({email: emailDesired})
     .then(() => {
