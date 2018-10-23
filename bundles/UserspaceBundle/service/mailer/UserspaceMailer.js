@@ -15,7 +15,7 @@ module.exports.send = function(params){
     return new Promise(function(resolve, reject) {
         ejs.renderFile(template, locals, {},function (err, html) {
             if (err) {
-                reject(new EmailNotSentError(error.redirection, error.flashMessage));
+                reject(err);
             } else {
                 const mailOptions = {
                     from: from,

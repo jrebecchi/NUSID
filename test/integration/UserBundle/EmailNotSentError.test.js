@@ -11,11 +11,11 @@ beforeAll((done) => {
 });
 
 describe("Test EmailNotSentError handling", () => {
-    test("", async (done) => {
+    test("Wrong email", async (done) => {
         const params = {
             email: "wrongemail.fr", 
             subject: 'test', 
-            template: path.resolve(__dirname,'../../../../../bundles/UserspaceBundle/views/emails/','confirm_email.ejs'),
+            template: path.resolve(__dirname,'../../../bundles/UserspaceBundle/views/emails/','confirm_email.ejs'),
             locals: {
                 confirmationToken: "truc",
                 host: "127.0.0.1"
@@ -34,7 +34,28 @@ describe("Test EmailNotSentError handling", () => {
             done();
         })
     }, 50000);
-   
+
+    test("Wrong email", async (done) => {
+        const params = {
+            email: "good@email.com", 
+            subject: 'test', 
+            template: 'wrong template file',
+            locals: {
+                confirmationToken: "truc",
+                host: "127.0.0.1"
+            },
+            error: {
+                redirection: '/login',
+                flashMessage: {type: "error", message:"Confirmation email not sent, an error has occured."}
+            }
+        }
+        UserspaceMailer.send(params)
+        .catch(err => {
+            expect(err).toBeTruthy();
+            expect(err instanceof EmailNotSentError).toBeFalsy();
+            done();
+        })
+    }, 50000);
 });
 
 afterAll((done) =>{
