@@ -13,9 +13,6 @@ let testUser = {
     conditions: true
 };
 
-let newPassword = "password2";
-let updatePasswordToken;
-
 beforeAll((done) => {
 
     appTester = new AppTester({useMockAuthentificaiton: false});

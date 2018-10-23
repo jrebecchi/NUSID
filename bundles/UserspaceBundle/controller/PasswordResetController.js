@@ -3,11 +3,12 @@ const crypto = require('crypto');
 const User = require('../model/UserModel');
 const ResetPasswordFormValidator = require('../service/forms/ResetPasswordFormValidator');
 const ChangePasswordFormValidator = require('../service/forms/ChangePasswordFormValidator');
+const path = require('path');
 const RECOVER_PASSWORD_TOKEN_LENGTH = 64;
 const DELAY_TO_CHANGE_PASSWORD_IN_MINUTS = 60;
 const {
     UpdatePasswordTooLateError,
-    UserNotFound
+    UserNotFound,
 } = require('../service/error/ErrorTypes');
 
 const generateToken = (cb) => {
@@ -94,26 +95,23 @@ exports.postResetPassword = function (req, res, next){
         return User.update({email: email}, {'extras.updatePasswordToken': updatePasswordToken, 'extras.passwordUpdateRequestDate': passwordUpdateRequestDate})
     })
     .then(() => {
-        sendPasswordRecoveryEmail(req, res, email, updatePasswordToken);
+        return UserspaceMailer.send({ 
+            template: path.resolve(__dirname,'../views/emails/','reset_password.ejs'), 
+            locals:{
+                updatePasswordToken: updatePasswordToken,
+                host: req.headers.host
+            },
+            email : email, 
+            subject:'Password Recovery',
+            error : {
+                redirection: '/login',
+                flashMessage: {type: "error", message:"Mail not sent, an error has occured."}
+            }
+        });
+    })
+    .then(() => {
+        req.flash('info', "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.");
+        res.redirect('/login');
     })
     .catch(next);
 };
-
-const sendPasswordRecoveryEmail = (req, res, email, updatePasswordToken) => {
-    UserspaceMailer.send(req,{
-        template:'emails/reset_password.ejs', 
-        locals:{
-            updatePasswordToken: updatePasswordToken,
-            host: req.headers.host
-        },
-        email : email, 
-        subject:'Password Recovery',
-    }, function (err) {
-        if (err) {
-            throw new EmailNotSentError("/", {type: "error", message:"Mail not sent, an error has occured."});
-        }
-        req.flash('info', "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.");
-        res.redirect('/login');
-    });
-};
-    

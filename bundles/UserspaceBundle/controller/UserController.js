@@ -7,8 +7,8 @@ const ModifyLastNameFormValidator = require('../service/forms/ModifyLastNameForm
 const ModifyPasswordFormValidator = require('../service/forms/ModifyPasswordFormValidator');
 const ModifyEmailFormValidator = require('../service/forms/ModifyEmailFormValidator');
 const ModifyUsernameFormValidator = require('../service/forms/ModifyUsernameFormValidator');
+const path = require('path');
 const {
-    EmailNotSentError,
     EmailAlreadyExistsError,
     UsernameAlreadyExistsError,
     WrongPasswordError,
@@ -115,28 +115,30 @@ exports.postCreateUser = function (req, res, next){
     })
     .then(() => {
         req.flash('success', 'User created !');
-        sendConfirmationEmail(req, res, user.extras.emailConfirmationCode, user.email, function(err){
-            if (err) {
-                throw new EmailNotSentError("/login", {type: "error", message:"Confirmation email not sent, an error has occured."});  
-            }
-            else {
-                req.flash('info', "You will receive a confirmation link at your email address in a few minutes.");
-            }
+        const error = {
+            redirection: '/login',
+            flashMessage: {type: "error", message:"Confirmation email not sent, an error has occured."}
+        }
+        return sendConfirmationEmail(user.email, user.extras.emailConfirmationCode, req.headers.host, error)
+    })
+    .then(() => {
+            req.flash('info', "You will receive a confirmation link at your email address in a few minutes.");
             res.redirect('/login');
-        });
     })
     .catch(next);
 };
 
 exports.getSendConfirmationEmail = function(req, res, next){
-    sendConfirmationEmail(req, res, req.user.extras.emailConfirmationCode, req.user.email, function(err){
-        if (err) {
-            return next(new EmailNotSentError("/dashboard", {type: "error", message:"Confirmation email not sent, an error has occured."}));
-        } else {
-            req.flash('success', "You will receive a confirmation link at your email address in a few minutes.");
-        }
-        res.redirect('/dashboard');  
-    });
+    const error = {
+        redirection: '/dashboard',
+        flashMessage: {type: "error", message:"Confirmation email not sent, an error has occured."}
+    }
+    sendConfirmationEmail(req.user.email, req.user.extras.emailConfirmationCode, req.headers.host, error)
+    .then(() => {
+        req.flash('success', "You will receive a confirmation link at your email address in a few minutes.");
+        res.redirect('/dashboard');
+    })
+    .catch(next);
 };
 
 exports.postModifyPassword = function(req, res, next){
@@ -220,15 +222,15 @@ exports.postModifyEmail = function(req, res, next){
     })
     .then(() => {
         req.flash('success', "Your email is now updated !");
-        sendConfirmationEmail(req, res, emailConfirmationCode, email, function(err){
-            if (err) {
-                throw new EmailNotSentError("/settings", {type: "error", message:"Confirmation email not sent, an error has occured."});  
-            }
-            else {
-                req.flash('info', "You will receive a confirmation link at your email address in a few minutes.");
-            }
-            res.redirect('/settings');
-        });
+        const error = {
+            redirection: '/settings',
+            flashMessage: {type: "error", message:"Confirmation email not sent, an error has occured."}
+        }
+        return sendConfirmationEmail(email, emailConfirmationCode, req.headers.host, error)
+    })
+    .then(() => {
+        req.flash('info', "You will receive a confirmation link at your email address in a few minutes.");
+        res.redirect('/settings');
     })
     .catch(next);
 };
@@ -303,14 +305,15 @@ exports.postDeleteAccount = function(req, res, next){
     .catch(next);
 };
 
-const sendConfirmationEmail = (req, res, confirmationToken, email, cb) => {
-    UserspaceMailer.send(req, {
+const sendConfirmationEmail = (email, confirmationToken, host, error) => {
+    return UserspaceMailer.send({
         email: email, 
         subject: 'Activate your account', 
-        template: 'emails/confirm_email.ejs', 
+        template: path.resolve(__dirname,'../views/emails/','confirm_email.ejs'),
         locals: {
             confirmationToken: confirmationToken,
-            host: req.headers.host
+            host: host
         },
-    }, cb);
+        error: error
+    })
 };

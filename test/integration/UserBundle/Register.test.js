@@ -191,7 +191,7 @@ describe('Prevent user registration when wrong inputs', () => {
 });
 
 describe('User Registration', () => {
-    test('Register user with correct entries and prevent other registration with same emmail or username', (done) => {
+    test('Register user with correct entries and prevent other registration with same email or username', (done) => {
         request.post('/register').send(testUser)
         .then((response) => {
             expect(response.header.location).toBe("/login");
