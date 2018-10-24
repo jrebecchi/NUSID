@@ -148,12 +148,7 @@ exports.postModifyPassword = function(req, res, next){
         res.redirect("/settings");
         return;
     }
-    User.userExists({email: req.user.email})
-    .then((exists) =>{
-        if (!exists)
-            throw new UserNotFound();
-        return User.isPasswordValid({email: req.user.email}, oldPassword)
-    })
+    User.isPasswordValid({email: req.user.email}, oldPassword)
     .then(isValid => {
         if (!isValid){
             throw new WrongPasswordError("/settings", {type: "error", message:"You entered a wrong password"});
@@ -178,12 +173,7 @@ exports.postModifyUsername = function(req, res, next){
         res.redirect("/settings");
         return;
     }
-    User.userExists({email: req.user.email})
-    .then((exists) =>{
-        if (!exists)
-            throw new UserNotFound();
-        return User.userExists({username: username});
-    })
+    User.userExists({username: username})
     .then(usernameExists => {
         if(usernameExists)
             throw new UsernameAlreadyExistsError("/settings", {type: "error", message:"Username already exists"});
@@ -208,12 +198,7 @@ exports.postModifyEmail = function(req, res, next){
         res.redirect("/settings");
         return;
     }
-    User.userExists({email: req.user.email})
-    .then((exists) =>{
-        if (!exists)
-            throw new UserNotFound();
-        return User.userExists({email: email});
-    })
+    User.userExists({email: email})
     .then(emailExists => {
         if(emailExists)
             throw new EmailAlreadyExistsError("/settings", {type: "error", message:"Email already exists"});
@@ -246,12 +231,7 @@ exports.postModifyFirstName = function(req, res, next){
         res.redirect("/settings");
         return;
     }
-    User.userExists({email: req.user.email})
-    .then((exists) =>{
-        if (!exists)
-            throw new UserNotFound();
-        return User.update({email: req.user.email}, {'extras.firstName': firstName});
-    })
+    User.update({email: req.user.email}, {'extras.firstName': firstName})
     .then(() => {
         req.flash('success', "Your first name is now updated !");
         res.redirect('/settings');
@@ -270,12 +250,7 @@ exports.postModifyLastName = function(req, res, next){
         res.redirect("/settings");
         return;
     }
-    User.userExists({email: req.user.email})
-    .then((exists) =>{
-        if (!exists)
-            throw new UserNotFound();
-        return User.update({email: req.user.email}, {'extras.lastName': lastName});
-    })
+    User.update({email: req.user.email}, {'extras.lastName': lastName})
     .then(() => {
         req.flash('success', "Your last names is now updated !");
         res.redirect('/settings');
@@ -285,12 +260,7 @@ exports.postModifyLastName = function(req, res, next){
 
 exports.postDeleteAccount = function(req, res, next){
     let password = req.body.password;
-    User.userExists({email: req.user.email})
-    .then((exists) =>{
-        if (!exists)
-            throw new UserNotFound();
-        return User.isPasswordValid({email: req.user.email}, password)
-    })
+    User.isPasswordValid({email: req.user.email}, password)
     .then(isValid => {
         if (!isValid){
             throw new WrongPasswordError("/settings", {type: "error", message:"You entered a wrong password"});
