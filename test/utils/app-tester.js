@@ -58,6 +58,7 @@ const AppTester = function (options){
         return this.request;
     };
 
+    /*API that might be used in the future
     this.getCookies = () => {
         return this.request.cookies;
     };
@@ -65,6 +66,7 @@ const AppTester = function (options){
     this.resetSession = () => {
         this.request = sessionize(this.app);
     };
+    */
 
     this.getQueryArguments = (query) => {
         const queryArguments = new Object();
