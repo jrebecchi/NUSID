@@ -1,5 +1,3 @@
-var exports;
-
 exports.getMyPrivateTab = function (req, res){
     res.render('pages/my-private-tab.ejs', { user: req.user });
 };

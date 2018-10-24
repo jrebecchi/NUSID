@@ -7,7 +7,7 @@ var app = angular.module('app', []);
 var HAS_ERROR_CSSCLASS = "has-error has-feedback";
 var HAS_SUCCESS_CSSCLASS = "has-success has-feedback";;
 
-var checkEmailExists = function($http, $scope){
+const checkEmailExists = function($http, $scope){
     $http.get("email-exists?email="+$scope.email)
         .then(function(response) {
             $scope.inputs["email"] = {
@@ -19,7 +19,7 @@ var checkEmailExists = function($http, $scope){
     });
 }
 
-var checkUsernameExists = function($http, $scope){
+const checkUsernameExists = function($http, $scope){
     $http.get("username-exists?username="+$scope.username)
         .then(function(response) {
             $scope.inputs["username"] = {
@@ -32,7 +32,7 @@ var checkUsernameExists = function($http, $scope){
 }
 
 app.controller('registration', function($scope, $http) {
-    var iv = new InputValidator();
+    const iv = new InputValidator();
     
     $scope.inputs = new Object();
     
@@ -88,7 +88,7 @@ app.controller('registration', function($scope, $http) {
 });
 app.controller('change-password', ['$scope', function($scope) {
     
-    var iv = new InputValidator();
+    const iv = new InputValidator();
     
     $scope.inputs = new Object();
     
@@ -115,7 +115,7 @@ app.controller('change-password', ['$scope', function($scope) {
 
 app.controller('settings', function($scope, $http) {
     
-    var iv = new InputValidator();
+    const iv = new InputValidator();
     
     $scope.inputs = new Object();
     

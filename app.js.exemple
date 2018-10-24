@@ -1,13 +1,13 @@
 //App entry point
-var express = require('express');
-var app = express();
-var path = require('path');
+const express = require('express');
+const app = express();
+const path = require('path');
 require('./config/config').init(app);
 
 //Declare here your bundles
-var userspaceBundle = require('./bundles/UserspaceBundle/UserspaceBundle');
-var mainBundle = require('./bundles/MainBundle/MainBundle');
-var myOwnBundle = require('./bundles/MyOwnBundle/MyOwnBundle');
+const userspaceBundle = require('./bundles/UserspaceBundle/UserspaceBundle');
+const mainBundle = require('./bundles/MainBundle/MainBundle');
+const myOwnBundle = require('./bundles/MyOwnBundle/MyOwnBundle');
 
 //Enter your mongoDB database connection options for the userspace
 global.userDBOptions = {
@@ -52,9 +52,9 @@ app.use(function (err, req, res, next) {
 });
 
 //Adapt to your server config
-var http = require('http');
-var server = http.createServer(app);
+const http = require('http');
+const server = http.createServer(app);
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
-  var addr = server.address();
+  const addr = server.address();
   console.log("Server listening at", addr.address + ":" + addr.port);
 });

@@ -89,7 +89,7 @@ You can have more options for the email parameters looking at the [nodemailer op
 Adapt the following code to your installation configuration:
 ```js
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
-  var addr = server.address();
+  const addr = server.address();
   console.log("Server listening at", addr.address + ":" + addr.port);
 });
 ```
@@ -185,8 +185,6 @@ $ touch bundles/MyOwnBundle/views/pages/my-public-tab.ejs
 * Step 5: Edit the controller `MyOwnController.js` that will return those templates we just created
 
 ```javascript
-var exports;
-
 exports.getMyPrivateTab = function (req, res){
     res.render('pages/my-private-tab.ejs', { user: req.user });
 };
@@ -200,10 +198,8 @@ For the public page, you need to include a crsfToken to enable the different for
 * Step 6: Edit the router `Router.js` that will serve those 2 pages
 
 ```javascript
-var exports;
-
-var MyOwnControler = require("../controller/MyOwnController.js");
-var proxy = require('connect-ensure-login');
+const MyOwnControler = require("../controller/MyOwnController.js");
+const proxy = require('connect-ensure-login');
 
 exports.init = function(app) {
 
@@ -230,8 +226,7 @@ Add the following on line 14 :
 * Step 8: Edit the bundle launcher `MyOwnController.js` to init the rooter
 
 ```javascript
-var exports;
-var Router = require('./router/Router');
+const Router = require('./router/Router');
 
 exports.init = function(app) {
     //Launch router
@@ -242,7 +237,7 @@ exports.init = function(app) {
 
 Import the bundle line 10:
 ```javascript
-var myOwnBundle = require('./bundles/MyOwnBundle/MyOwnBundle');
+const myOwnBundle = require('./bundles/MyOwnBundle/MyOwnBundle');
 ```
 Init the bundle line 37:
 ```javascript

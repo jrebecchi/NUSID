@@ -1,14 +1,12 @@
-var exports;
-
-var USERNAME_LENGTH = 4;
-var PASSWORD_LENGTH = 8;
-var NAME_LENGTH = 2;
+const USERNAME_LENGTH = 4;
+const PASSWORD_LENGTH = 8;
+const NAME_LENGTH = 2;
 
 exports.testUsername = function(username){
-    var re = /^[a-zA-Z0-9\-_.]*$/;
-    var hasError = false;
-    var errorMsg = "";
-    if(username.length < 4){
+    const re = /^[a-zA-Z0-9\-_.]*$/;
+    let hasError = false;
+    let errorMsg = "";
+    if(username.length < USERNAME_LENGTH){
         hasError=true;
         errorMsg = "The username must contains more than 4 characters !";
     }
@@ -20,9 +18,9 @@ exports.testUsername = function(username){
 }
     
 exports.testEmail = function(email){
-    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    var hasError = false;
-    var errorMsg = "";
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let hasError = false;
+    let errorMsg = "";
     if(!re.test(email)){
         hasError=true;
         errorMsg = "The email adress is not valid !";
@@ -31,8 +29,8 @@ exports.testEmail = function(email){
 }
 
 exports.testPassword = function(password){
-    var hasError = false;
-    var errorMsg = "";
+    let hasError = false;
+    let errorMsg = "";
     if(password.length < PASSWORD_LENGTH){
         hasError=true;
         errorMsg = "The password must contains more than "+PASSWORD_LENGTH+" characters !";
@@ -41,8 +39,8 @@ exports.testPassword = function(password){
 }
     
 exports.testConfirmPassword = function(confirmPassword, password){
-    var hasError = false;
-    var errorMsg = "";
+    let hasError = false;
+    let errorMsg = "";
     if(!(confirmPassword === password)){
         hasError=true;
         errorMsg = "The passwords don't match !";
@@ -51,9 +49,9 @@ exports.testConfirmPassword = function(confirmPassword, password){
 }
     
 exports.testName = function(name){
-    var re = /^[a-zA-z]+([ '\-][a-zA-Z]+)*$/;
-    var hasError = false;
-    var errorMsg = "";
+    const re = /^[a-zA-z]+([ '\-][a-zA-Z]+)*$/;
+    let hasError = false;
+    let errorMsg = "";
     if(name.length < NAME_LENGTH){
         hasError=true;
         errorMsg = "The name must contains more than 2 characters !";
@@ -66,8 +64,8 @@ exports.testName = function(name){
 }
     
 exports.testImperativeCheckBox = function(checkBoxValue){
-    var hasError = false;
-    var errorMsg = "";
+    let hasError = false;
+    let errorMsg = "";
     if(!checkBoxValue){
         hasError=true;
         errorMsg = "You must agree with the terms of service !";

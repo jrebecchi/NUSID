@@ -1,15 +1,13 @@
-var exports;
-
-var express = require('express');
-var bodyParser = require('body-parser');
-var flashify = require('flashify');
-var morgan = require('morgan');
-var passport = require('passport');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
-var csrf = require('csurf');
-var helmet = require('helmet');
+const express = require('express');
+const bodyParser = require('body-parser');
+const flashify = require('flashify');
+const morgan = require('morgan');
+const passport = require('passport');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const csrf = require('csurf');
+const helmet = require('helmet');
 
 exports.init = function(app){
     app.use(express.static(path.resolve(__dirname, '../client')));
