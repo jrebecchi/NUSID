@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/JohannC/NUSID.svg?branch=master)](https://travis-ci.org/JohannC/NUSID)
-[![Coverage Status](https://coveralls.io/repos/github/JohannC/NUSID/badge.svg?branch=master)](https://coveralls.io/github/JohannC/NUSID?branch=master)
+[![Build Status](https://travis-ci.org/jrebecchi/NUSID.svg?branch=master)](https://travis-ci.org/jrebecchi/NUSID)
+[![Coverage Status](https://coveralls.io/repos/github/jrebecchi/NUSID/badge.svg?branch=master)](https://coveralls.io/github/jrebecchi/NUSID?branch=master)
 
 
 [![NUSID Logo](https://nusidpublicresources-xeqnuojpin.now.sh/Nusid_Banner_Logo_800px.jpg)](#)
@@ -41,7 +41,7 @@ Installation is done using the
 [`git clone` command](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
 ```bash
-$ git clone https://github.com/JohannC/NUSID.git
+$ git clone https://github.com/jrebecchi/NUSID.git
 $ cd NUSID
 $ npm install
 ```
@@ -308,7 +308,7 @@ If you want to share some improvements, contact me and I will add you as a contr
 [downloads-image]: https://img.shields.io/npm/dm/express.svg
 [downloads-url]: https://npmjs.org/package/express
 [travis-image]: https://img.shields.io/travis/expressjs/express/master.svg?label=linux
-[travis-url]: https://github.com/JohannC/NUSID
+[travis-url]: https://github.com/jrebecchi/NUSID
 [appveyor-image]: https://img.shields.io/appveyor/ci/dougwilson/express/master.svg?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/dougwilson/express
 [coveralls-image]: https://img.shields.io/coveralls/expressjs/express/master.svg
