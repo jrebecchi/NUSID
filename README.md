@@ -1,3 +1,4 @@
+![Node.js CI](https://github.com/jrebecchi/NUSID/workflows/Node.js%20CI/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/jrebecchi/NUSID/badge.svg?branch=master)](https://coveralls.io/github/jrebecchi/NUSID?branch=master)
 
 
