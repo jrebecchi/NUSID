@@ -4,7 +4,7 @@
   "description": "NUSID is a generic user space you can use in all your Node.js apps as a starting point. It contains everything, from the MongoDB database model to the dynamic views made with EJS, Bootstrap3 and AngularJS.",
   "main": "app.js",
   "dependencies": {
-    "async": "2.6.0",
+    "async": "2.6.4",
     "body-parser": "^1.19.0",
     "connect-ensure-login": "0.1.1",
     "cookie-parser": "1.4.3",
